@@ -15,13 +15,13 @@
     <div id="body">
         <div id="create-update-form">
             <div id="form">
-                <table>
+                <table border="1">
                     <tr>
-                        <td><label for="name">Name</label></td>
+                        <td><label class="required" for="name">Name</label></td>
                         <td><input type="text" id="name"></td>
                     </tr>
                     <tr>
-                        <td><label for="phone">Mobile Number</label></td>
+                        <td><label class="required" for="phone">Mobile Number</label></td>
                         <td><input type="tel" id="phone"></td>
                     </tr>
                     <tr>
@@ -40,6 +40,7 @@
                         <td><label for="state">State</label></td>
                         <td>
                             <select name="States" id="state">
+                                <option value="Empty" style="background-color:darkgray">Select State</option>
                                 <option value="Andhra Pradesh">Andhra Pradesh</option>
                                 <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                                 <option value="Assam">Assam</option>
@@ -80,18 +81,32 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><input type="button" id="Add-Contact" value="Create"></td>
-                        <td><input type="button" id="Reset" value="Reset"></td>
+                        <td>
+                            <input type="button" id="Add-Contact" value="Create">
+                            <input type="button" id="Update-Contact" value="Update">
+                        </td>
+                        <td>
+                            <input type="button" id="Reset" value="Reset">
+                            <input type="button" id="Cancel" value="Cancel">
+                        </td>
                     </tr>
                 </table>
+            </div>
+            <div>
+                <p id="Error-Msg">
+
+                </p>
             </div>
         </div>
         <div id="view-point">
             <div id="option-header">
-                <input id="Add" type="button" value="Add">
-                <input id="Update" type="button" value="Update">
+                <!--<input id="Add" type="button" value="Add">
+                <input id="Update" type="button" value="Update">-->
+                <input id="Select-All" type="button" value="Select All">
+                <input id="Delete" type="button" value="Delete Selected">
+                <input id="UnSelect-All" type="button" value="Deselect All">
             </div>
-            <div id="contacts-list">
+            <div id="contacts-list" class="scrollit">
             </div>
         </div>
     </div>

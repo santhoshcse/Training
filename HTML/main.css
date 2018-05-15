@@ -1,6 +1,8 @@
+body {
+    background-color: #CAD3C8;
+}
 #header {
     width: 100%;
-    height: 15%;
     background-color: aquamarine;
 }
 #site-title {
@@ -11,10 +13,46 @@
     width: 100%;
 }
 #create-update-form {
-    width: 40%;
+    width: 30%;
     float: left;
 }
+#form {
+    /*background-color: #58B19F;*/
+}
 #view-point {
-    width: 60%;
+    width: 70%;
     float: left;
+}
+input[type="checkbox"] {
+    width: 25px; 
+    height: 25px; 
+}
+#Update-Contact {
+    display: none;
+}
+#Add-Contact {
+    display: block;
+}
+.required::after {
+    content: " *";
+    color: red;
+}
+#contacts-list {
+    background-color: #CAD3C8;
+}
+#Error-Msg {
+    background-color: red;
+    height: 30px;
+    width: 75%;
+    display: none;
+}
+.scrollit {
+    overflow: scroll;
+    height: 500px;
+}
+#Reset {
+    display: block;
+}
+#Cancel {
+    display: none;
 }
