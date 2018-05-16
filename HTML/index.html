@@ -9,6 +9,7 @@
     <script src="main.js"></script>
 </head>
 <body>
+    <!--<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->
     <div id="header">
         <h1 id="site-title">Contacts Manager</h1>
     </div>
@@ -22,7 +23,7 @@
                     </tr>
                     <tr>
                         <td><label class="required" for="phone">Mobile Number</label></td>
-                        <td><input type="tel" id="phone"></td>
+                        <td><input type="tel" id="phone" maxlength="10"></td>
                     </tr>
                     <tr>
                         <td><label for="email">E-Mail</label></td>
@@ -30,7 +31,7 @@
                     </tr>
                     <tr>
                         <td><label for="dob">DOB</label></td>
-                        <td><input type="date" id="dob"></td>
+                        <td><input type="date" id="dob" ></td>
                     </tr>
                     <tr>
                         <td><label for="address">Address</label></td>
@@ -82,12 +83,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="button" id="Add-Contact" value="Create">
-                            <input type="button" id="Update-Contact" value="Update">
+                            <input type="button" id="Add-Contact" class="opt-btn" value="Create">
+                            <input type="button" id="Update-Contact" class="opt-btn" value="Update">
                         </td>
                         <td>
-                            <input type="button" id="Reset" value="Reset">
-                            <input type="button" id="Cancel" value="Cancel">
+                            <input type="button" id="Reset" class="opt-btn" value="Reset">
+                            <input type="button" id="Cancel" class="opt-btn" value="Cancel">
                         </td>
                     </tr>
                 </table>
@@ -102,10 +103,12 @@
             <div id="option-header">
                 <!--<input id="Add" type="button" value="Add">
                 <input id="Update" type="button" value="Update">-->
-                <input id="Select-All" type="button" value="Select All">
-                <input id="Delete" type="button" value="Delete Selected">
-                <input id="UnSelect-All" type="button" value="Deselect All">
+                <input id="Select-All" type="button" class="opt-btn" value="Select All">
+                <input id="Delete" type="button" class="opt-btn" value="Delete Selected">
+                <input id="UnSelect-All" type="button" class="opt-btn" value="Deselect All">
+                <input id="Export-CSV" type="button" class="opt-btn" value="Export as CSV">
             </div>
+            <br>
             <div id="contacts-list" class="scrollit">
             </div>
         </div>

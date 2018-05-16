@@ -1,9 +1,12 @@
 var contactsObj = [];
 var contacts = null;
+var sortFlag = false;
 window.onload = init;
 function init(){
     contacts = document.getElementById("contacts-list");
     // console.log(contacts);
+    setMaxDataAsToday();
+    setMinDateAs100BeforeToday();
     loadContacts();
     // var add = document.getElementById("Add");
     //add.onclick = addContactPage;
@@ -14,6 +17,8 @@ function init(){
     selectAll.onclick = selectAllContacts;
     var unSelectAll = document.getElementById("UnSelect-All");
     unSelectAll.onclick = unSelectAllContacts;
+    var _export = document.getElementById("Export-CSV");
+    _export.onclick = exportContacts;
     var add_Contact = document.getElementById("Add-Contact");
     add_Contact.onclick = addContact;
     var reset = document.getElementById("Reset");
@@ -25,6 +30,87 @@ function init(){
     // update.onclick = fetchJSONFile('contact-form.html', function(data){
     //     console.log(data);
     // });
+}
+function sortByName(id){
+    var down = document.getElementById("sort-rev");
+    if(!sortFlag){
+        sortFlag = true;
+        down.style.display = "none";
+        ascending();
+    }
+    else{
+        var up = document.getElementById(id);
+        up.style.display = "none";
+        down.style.display = "block";
+        descending();
+    }
+}
+function sortByNameReverse(id){
+    var up = document.getElementById("sort");
+    if(!sortFlag){
+        sortFlag = true;
+        up.style.display = "none";
+        descending();
+    }
+    else{
+        var down = document.getElementById(id);
+        down.style.display = "none";
+        up.style.display = "block";
+        ascending();
+    }
+}
+function ascending(){
+
+}
+function descending(){
+
+}
+function exportContacts(){
+    var csvContent = "data:text/csv;charset=utf-8;,";
+    var jsonContacts = JSON.parse(localStorage.getItem("contacts"));
+    csvContent += "Name,Phone,Email,DOB,Address,State\r\n";
+    jsonContacts.forEach(function(contact){
+        var temp = null;
+        if(contact.state == "Select State"){
+            temp = "";
+        }
+        else{
+            temp = contact.state;
+        }
+        csvContent += contact.name + "," + contact.phone.toString() + "," + contact.email + "," + contact.dob + "," + contact.address + "," + temp + "\r\n";
+    });
+    var encodedUri = encodeURI(csvContent);
+    // window.open(encodedUri);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "contacts.csv");
+    link.innerHTML= "Click Here to download";
+    document.body.appendChild(link);
+    link.click(); 
+    // link.style.display = "none";
+    document.body.removeChild(link);
+}
+function setMinDateAs100BeforeToday(){
+    var minDate = new Date();
+    var yyyy = minDate.getFullYear() - 100;
+    var dd = "01";
+    var mm = "01";
+    minDate = yyyy + "-" + mm + "-" + dd;
+    document.getElementById("dob").setAttribute("min", minDate);
+}
+function setMaxDataAsToday(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd = '0' + dd;
+    }
+    if(mm<10){
+        mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("dob").setAttribute("max", today);
 }
 function unSelectAllContacts(){
     var checkboxes = document.getElementsByName("select-contact");
@@ -43,16 +129,17 @@ function selectAllContacts(){
     }
 }
 function loadContacts(){
+    sortFlag = false;
     var jsonContacts = JSON.parse(localStorage.getItem("contacts"));
     if(jsonContacts != null && jsonContacts.length > 0){
-        var tableContent = "<table border=\"1\"><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr>";
+        var tableContent = "<table border=\"1\"><tr><th>Select</th><th><div style=\"float:left\">Name</div><div style=\"float:right\"><img src=\"up.svg\" alt=\"Ascending Order\" height=\"12\" width=\"12\" onclick=\"sortByName(this.id)\" id=\"sort\" title=\"Ascending Sort\" ></div><div style=\"float:right\"><img src=\"down.svg\" alt=\"Descending Order\" height=\"12\" width=\"12\" onclick=\"sortByNameReverse(this.id)\" id=\"sort-rev\" title=\"Descending Sort\" ></div></th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr>";
         var tempData = "";
         var chkboc_value = 0;
         jsonContacts.forEach(function(contact) {
             if(contact.state == "Select State"){
                 contact.state = "";
             }
-            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phone + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dob + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + contact.state + "</td>" + "<td>&nbsp;<img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" >&nbsp;&nbsp;<img src=\"update.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"update contact\" ></td>" + "</tr>";
+            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phone + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dob + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + contact.state + "</td>" + "<td>&nbsp;<img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" >&nbsp;&nbsp;<img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
             chkboc_value ++;
         });
         tableContent += tempData;
@@ -153,10 +240,10 @@ function updateContact(rowNumber){
     console.log(rowNumber);
     var _name = document.getElementById("name").value;
     var _phone = document.getElementById("phone").value;
-    var isValid = validateInput(_name, _phone);
+    var _email = document.getElementById("email").value;
+    var _dob = document.getElementById("dob").value;
+    var isValid = validateInput(_name, _phone, _email, _dob);
     if(isValid){
-        var _email = document.getElementById("email").value;
-        var _dob = document.getElementById("dob").value;
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
@@ -184,6 +271,13 @@ function updateContact(rowNumber){
             });
         }
         localStorage.setItem("contacts", JSON.stringify(jsonContacts));
+        var error = document.getElementById("Error-Msg");
+        error.innerHTML = "Contact Updated";
+        error.style.display = "block";
+        setTimeout(function() {
+            error.innerHTML = null;
+            error.style.display = "none";
+        }, 5000);
         cancelUpdate();
         // resetForm();
         loadContacts();
@@ -222,10 +316,10 @@ function testing(imgIndex){
 function addContact(){
     var _name = document.getElementById("name").value;
     var _phone = document.getElementById("phone").value;
-    var isValid = validateInput(_name, _phone);
+    var _email = document.getElementById("email").value;
+    var _dob = document.getElementById("dob").value;
+    var isValid = validateInput(_name, _phone, _email, _dob);
     if(isValid){
-        var _email = document.getElementById("email").value;
-        var _dob = document.getElementById("dob").value;
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
@@ -266,6 +360,13 @@ function addContact(){
         // localStorage.setItem("phone", _phone);
         // console.log(localStorage.getItem("name"));
         // console.log(localStorage.getItem("phone"));
+        var error = document.getElementById("Error-Msg");
+        error.innerHTML = "Contact Added";
+        error.style.display = "block";
+        setTimeout(function() {
+            error.innerHTML = null;
+            error.style.display = "none";
+        }, 5000);
         resetForm();
         loadContacts();
     }
@@ -280,7 +381,7 @@ function addContact(){
         }, 5000);
     }
 }
-function validateInput(_name, _phone){
+function validateInput(_name, _phone, _email, _dob){
     //TODO
     var error = document.getElementById("Error-Msg");
     if(_name.length == 0){
@@ -291,17 +392,47 @@ function validateInput(_name, _phone){
         error.innerHTML = "Phone Number is Empty";
         return false;
     }
-    else if(_phone.length != 10){
+    else if(!isPhoneNumber(_phone)){
+        error.innerHTML = "Phone Number should have only digits";
+        return false;
+    }
+    else if(_phone.length < 10){
         error.innerHTML = "Phone Number should be 10 digit";
         return false;
     }
-    else if(!isPhoneNumber(_phone)){
-        error.innerHTML = "Phone Number should have only digits";
+    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(_email))){
+        error.innerHTML = "InValid Email ID";
+        return false;
+    }
+    else if(_dob != "" && !checkDOB(_dob)){
+        error.innerHTML = "DOB is Invalid";
         return false;
     }
     else{
         return true;
     }
+}
+function checkDOB(_dob){
+    // var dat = _dob.split('-');
+    var newDate = new Date(_dob);
+    // var yyyy = parseInt(dat[0]);
+    // var mm = parseInt(dat[1]);
+    // var dd = parseInt(dat[2]);
+    var date = new Date();
+    var minYear = date.getFullYear() - 100;
+    // var maxYear = date.getFullYear();
+    // var minMonth = 01;
+    // var maxMonth = 
+    var minDate = new Date(minYear + "-01-01");
+    if(!(newDate <= date && newDate >= minDate)){
+        return false;
+    }
+    // if(!(yyyy >= minYear & yyyy <= maxYear)){
+    //     // alert("ok");
+    //     return false;
+    // }
+    // console.log(dat);
+    return true;
 }
 function isPhoneNumber(_phone){
     var flag = true;

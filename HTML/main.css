@@ -41,7 +41,7 @@ input[type="checkbox"] {
     background-color: #CAD3C8;
 }
 #Error-Msg {
-    background-color: red;
+    color: red;
     height: 30px;
     width: 75%;
     display: none;
@@ -55,4 +55,13 @@ input[type="checkbox"] {
 }
 #Cancel {
     display: none;
+}
+.opt-btn {
+    background-color: aquamarine;
+}
+#sort {
+
+}
+#sort-rev {
+
 }
