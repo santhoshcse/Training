@@ -47,8 +47,9 @@ input[type="checkbox"] {
     display: none;
 }
 .scrollit {
-    overflow: scroll;
+    overflow: auto;
     height: 500px;
+    width: 100%;
 }
 #Reset {
     display: block;
@@ -64,4 +65,13 @@ input[type="checkbox"] {
 }
 #sort-rev {
 
+}
+#list {
+    width: 100%;
+}
+#list tr:nth-child(odd) {
+    background-color: #CAD3C8;
+}
+#list tr:nth-child(even) {
+    background-color: #ffffff;
 }

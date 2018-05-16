@@ -132,7 +132,7 @@ function loadContacts(){
     sortFlag = false;
     var jsonContacts = JSON.parse(localStorage.getItem("contacts"));
     if(jsonContacts != null && jsonContacts.length > 0){
-        var tableContent = "<table border=\"1\"><tr><th>Select</th><th><div style=\"float:left\">Name</div><div style=\"float:right\"><img src=\"up.svg\" alt=\"Ascending Order\" height=\"12\" width=\"12\" onclick=\"sortByName(this.id)\" id=\"sort\" title=\"Ascending Sort\" ></div><div style=\"float:right\"><img src=\"down.svg\" alt=\"Descending Order\" height=\"12\" width=\"12\" onclick=\"sortByNameReverse(this.id)\" id=\"sort-rev\" title=\"Descending Sort\" ></div></th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr>";
+        var tableContent = "<table id=\"list\" border=\"1\"><tr><th>Select</th><th><div style=\"float:left\">Name</div><div style=\"float:right\"><img src=\"up.svg\" alt=\"Ascending Order\" height=\"12\" width=\"12\" onclick=\"sortByName(this.id)\" id=\"sort\" title=\"Ascending Sort\" ></div><div style=\"float:right\"><img src=\"down.svg\" alt=\"Descending Order\" height=\"12\" width=\"12\" onclick=\"sortByNameReverse(this.id)\" id=\"sort-rev\" title=\"Descending Sort\" ></div></th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr>";
         var tempData = "";
         var chkboc_value = 0;
         jsonContacts.forEach(function(contact) {
