@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script>
 </head>
-<body>
+<body onclick="saveEdit()">
     <!--<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->
     <div id="header">
         <h1 id="site-title"><img src="title.png" alt="title icon" height="25px" width="25px">&nbsp;&nbsp;Contacts Manager</h1>
@@ -20,15 +20,15 @@
                 <table>
                     <tr>
                         <td><label class="required" for="name">Name</label></td>
-                        <td><input type="text" id="name"></td>
+                        <td><input type="text" id="name" size="24"></td>
                     </tr>
                     <tr>
                         <td><label class="required" for="phone">Mobile Number</label></td>
-                        <td><input type="tel" id="phone" maxlength="10"></td>
+                        <td><input type="tel" id="phone" maxlength="10" size="24"></td>
                     </tr>
                     <tr>
                         <td><label for="email">E-Mail</label></td>
-                        <td><input type="email" id="email"></td>
+                        <td><input type="email" id="email" size="24"></td>
                     </tr>
                     <tr>
                         <td><label for="dob">DOB</label></td>
@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td><label for="address">Address</label></td>
-                        <td><input type="text" id="address"></td>
+                        <td><input type="text" id="address" size="24"></td>
                     </tr>
                     <tr>
                         <td><label for="state">State</label></td>

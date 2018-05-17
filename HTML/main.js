@@ -31,6 +31,9 @@ function init(){
     //     console.log(data);
     // });
 }
+function saveEdit(){
+    
+}
 function sortByName(id){
     var down = document.getElementById("sort-rev");
     if(!sortFlag){
@@ -161,7 +164,7 @@ function deleteUpdate(clickedImg){
         deleteContact(rowNumber);
     }
     else if(cmd[1] == "update"){
-        toUpdate(rowNumber);
+        // toUpdate(rowNumber);
     }
     // var elems = document.getElementsByClassName("delete-icon");
     // var imgIn = 0;
