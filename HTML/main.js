@@ -2,6 +2,19 @@ var contactsObj = [];
 var contacts = null;
 var sortFlag = false;
 window.onload = init;
+/*Added*/
+function myFunction(value) {
+	var ele = document.getElementById("myText");
+    //alert("hi");
+	if(value == 1){
+        ele.readOnly = true;
+        ele.style.border = "none";
+    }
+    else{
+    	ele.readOnly = false;
+        ele.style.border = "";
+    }
+}
 function init(){
     contacts = document.getElementById("contacts-list");
     // console.log(contacts);
@@ -151,7 +164,7 @@ function loadContacts(){
         // deleteUpdate();
     }
     else{
-        contacts.innerHTML = null;
+        contacts.innerHTML = "";//null;
     }
 }
 function deleteUpdate(clickedImg){
@@ -164,7 +177,7 @@ function deleteUpdate(clickedImg){
         deleteContact(rowNumber);
     }
     else if(cmd[1] == "update"){
-        // toUpdate(rowNumber);
+        toUpdate(rowNumber); //New Implementation
     }
     // var elems = document.getElementsByClassName("delete-icon");
     // var imgIn = 0;
