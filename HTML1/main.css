@@ -1,0 +1,81 @@
+body {
+    background-color: #CAD3C8;
+}
+#header {
+    width: 100%;
+    background-color: aquamarine;
+}
+#site-title {
+    color: blue;
+    text-align: center;
+}
+#body {
+    width: 100%;
+}
+#create-update-form {
+    width: 30%;
+    float: left;
+}
+/*#form {
+    background-color: #58B19F;
+}*/
+#view-point {
+    width: 70%;
+    float: left;
+}
+input[type="checkbox"] {
+    width: 25px; 
+    height: 25px; 
+}
+#Update-Contact {
+    display: none;
+}
+#Add-Contact {
+    display: block;
+}
+.required::after {
+    content: " *";
+    color: red;
+}
+#contacts-list {
+    background-color: #CAD3C8;
+}
+#Error-Msg {
+    color: red;
+    height: 30px;
+    width: 75%;
+    display: none;
+}
+.scrollit {
+    overflow: auto;
+    height: 500px;
+    width: 100%;
+}
+#Reset {
+    display: block;
+}
+#Cancel {
+    display: none;
+}
+.opt-btn {
+    background-color: aquamarine;
+}
+/*#sort {
+
+}
+#sort-rev {
+
+}*/
+#list {
+    width: 100%;
+    /*border-style: solid;*/
+}
+/*#list tr:nth-child(odd) {
+    background-color: #CAD3C8;
+}
+#list tr:nth-child(even) {
+    background-color: #ffffff;
+}*/
+#list thead tr:first-child {
+    background-color: aquamarine;
+}
