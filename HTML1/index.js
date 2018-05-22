@@ -1,3 +1,6 @@
+/**
+ * @description Contact Class
+ */
 class Contact {
     constructor(id, name, phoneNumber, email, dateOfBirth, address, state) {
         this.id = id;
@@ -56,36 +59,38 @@ class Contact {
 }
 // Holds complete contacts list
 contactList = [];
-
+//Global Variables
 var contacts = null;
-var sortFlag = false;
+var deleteFlag = true;
+/**
+ * @description init function
+ */
 window.onload = function (){
     // sample records
-    var date1 = new Date("2018-05-21");
-    var str = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate();
-    var contact1 = new Contact(1, "Santhosh", 9003435809, "gsaku0091@gmail.com", str, "Coimbatore", "TamilNadu");
-    date1 = new Date("2018-04-21");
-    str = date1.getFullYear() + "-" + (date1.getMonth()+1) + "-" + date1.getDate();
-    var contact2 = new Contact(2, "Kumar", 9003689126, "gsaku0092@gmail.com", str, "Chennai", "TamilNadu");
+    var contact1 = new Contact(1, "Santhosh", 9003435809, "gsaku0091@gmail.com", "2018-05-21", "Coimbatore", "Tamil Nadu");
+    var contact2 = new Contact(2, "Kumar", 9003689126, "gsaku0092@gmail.com", "2018-04-21", "Chennai", "Tamil Nadu");
     contactList.push(contact1);
     contactList.push(contact2);
-
+    //Events
     contacts = document.getElementById("contacts-list");
-    setMaxDataAsToday();
-    setMinDateAs100BeforeToday();
+    setMaxData();
+    setMinDate();
     loadContacts();
     var deleteBtn = document.getElementById("Delete");
     deleteBtn.onclick = deleteSelected;
     var selectAll = document.getElementById("Select-All");
     selectAll.onclick = selectAllContacts;
     var unSelectAll = document.getElementById("UnSelect-All");
-    unSelectAll.onclick = unSelectAllContacts;
+    unSelectAll.onclick = deSelectAllContacts;
     var add_Contact = document.getElementById("Add-Contact");
     add_Contact.onclick = addContact;
     var reset = document.getElementById("Reset");
     reset.onclick = resetForm;
 }
-function setMinDateAs100BeforeToday(){
+/**
+ * @description sets min attribute of date input field
+ */
+function setMinDate(){
     var minDate = new Date();
     var yyyy = minDate.getFullYear() - 100;
     var dd = "01";
@@ -93,7 +98,10 @@ function setMinDateAs100BeforeToday(){
     minDate = yyyy + "-" + mm + "-" + dd;
     document.getElementById("dob").setAttribute("min", minDate);
 }
-function setMaxDataAsToday(){
+/**
+ * @description sets max attribute of date input field
+ */
+function setMaxData(){
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
@@ -107,7 +115,10 @@ function setMaxDataAsToday(){
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("dob").setAttribute("max", today);
 }
-function unSelectAllContacts(){
+/**
+ * @description unselects all contacts
+ */
+function deSelectAllContacts(){
     var checkboxes = document.getElementsByName("select-contact");
     var selectedCheckboxes = [];
     for (let index = 0; index < checkboxes.length; index++) {
@@ -115,6 +126,9 @@ function unSelectAllContacts(){
         element.checked = false;
     }
 }
+/**
+ * @description selects all contacts
+ */
 function selectAllContacts(){
     var checkboxes = document.getElementsByName("select-contact");
     var selectedCheckboxes = [];
@@ -123,17 +137,21 @@ function selectAllContacts(){
         element.checked = true;
     }
 }
+/**
+ * @description displays the JSON Object into Table format
+ */
 function loadContacts(){
     var jsonContacts = contactList;
     if(jsonContacts != null && jsonContacts.length > 0){
-        var tableContent = "<table id=\"list\" border=\"1\"><thead><tr><th>Select</th><th><div style=\"float:left\">Name</div><div style=\"float:right\"><img src=\"up.svg\" alt=\"Ascending Order\" height=\"12\" width=\"12\" onclick=\"sortByName(this.id)\" id=\"sort\" title=\"Ascending Sort\" ></div><div style=\"float:right\"><img src=\"down.svg\" alt=\"Descending Order\" height=\"12\" width=\"12\" onclick=\"sortByNameReverse(this.id)\" id=\"sort-rev\" title=\"Descending Sort\" ></div></th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+        var tableContent = "<table id=\"list\" border=\"1\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
         var tempData = "";
         var chkboc_value = 0;
         jsonContacts.forEach(function(contact) {
+            var tempState = contact.state;
             if(contact.state == "Select State"){
-                contact.state = "";
+                tempState = "";
             }
-            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + contact.state + "</td>" + "<td>&nbsp;<img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" >&nbsp;&nbsp;<img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdate(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td>&nbsp;<img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" >&nbsp;&nbsp;<img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
             chkboc_value ++;
         });
         tableContent += tempData;
@@ -141,43 +159,57 @@ function loadContacts(){
         contacts.innerHTML = tableContent;
     }
     else{
-        contacts.innerHTML = "";//null;
+        contacts.innerHTML = "";
     }
 }
-function deleteUpdate(clickedImg){
-    // console.log(clickedImg);
+/**
+ * @description Util function to delete or update the specified record
+ * @param {string} clickedImg id of the clicked icon (delete/update)
+ */
+function deleteUpdateUtil(clickedImg){
     var rowNumber = parseInt(clickedImg);
-    // console.log(rowNumber);
     var cmd = clickedImg.split('-');
-    // console.log(cmd[1]);
     if(cmd[1] == "delete"){
-        deleteContact(rowNumber);
+        if(deleteFlag){
+            deleteContact(rowNumber);
+        }
+        else{
+            alert("Can't delete while updating");
+        }
     }
     else if(cmd[1] == "update"){
         toUpdate(rowNumber);
+        deleteFlag = false;
     }
 }
+/**
+ * @description Deletes the specified record
+ * @param {Number} rowNumber row number of the record to be deleted
+ */
 function deleteContact(rowNumber){
-    var jsonContacts = contactList;//JSON.parse(localStorage.getItem("contacts"));
-    var tempContacts = [];
-    var it = 0;
-    jsonContacts.forEach(function(contact) {
-        if(it == rowNumber){
-            //Nothing to do
-        }
-        else{
-            tempContacts.push(contact);
-            // console.log(contact.name);
-        }
-        it ++;
-    });
-    contactList = tempContacts;
-    // jsonContacts = tempContacts;
-    // localStorage.setItem("contacts", JSON.stringify(jsonContacts));
-    loadContacts();
+    if(confirm("Confirm Delete ?")){
+        var jsonContacts = contactList;
+        var tempContacts = [];
+        var it = 0;
+        jsonContacts.forEach(function(contact) {
+            if(it == rowNumber){
+                //Continue
+            }
+            else{
+                tempContacts.push(contact);
+            }
+            it ++;
+        });
+        contactList = tempContacts;
+        loadContacts();
+    }
 }
+/**
+ * @description Makes Specified Record's data to edit
+ * @param {Number} rowNumber 
+ */
 function toUpdate(rowNumber){
-    var jsonContacts = contactList;//JSON.parse(localStorage.getItem("contacts"));
+    var jsonContacts = contactList;
     var _name = document.getElementById("name");
     _name.value = jsonContacts[rowNumber].name;
     var _phone = document.getElementById("phone");
@@ -189,17 +221,12 @@ function toUpdate(rowNumber){
     var _address = document.getElementById("address");
     _address.value = jsonContacts[rowNumber].address;
     var stateOp = document.getElementById("state");
-    // var _state = stateOp.options[stateOp.selectedIndex].text;
-    // stateOp.options[rowNumber];
-    // stateOp.selectedIndex = rowNumber;
-    // stateOp.selectedIndex = jsonContacts[rowNumber].state;
     if(jsonContacts[rowNumber].state == "Select State"){
         stateOp.selectedIndex = 0;
     }
     else{
         stateOp.value = jsonContacts[rowNumber].state;
     }
-
     var add_Contact = document.getElementById("Add-Contact");
     add_Contact.style.display = "none";
     var update_Contact = document.getElementById("Update-Contact");
@@ -213,7 +240,11 @@ function toUpdate(rowNumber){
         updateContact(rowNumber);
     }
 }
+/**
+ * @description Cancel the Update Operation
+ */
 function cancelUpdate(){
+    deleteFlag = true;
     var add_Contact = document.getElementById("Add-Contact");
     add_Contact.style.display = "block";
     var update_Contact = document.getElementById("Update-Contact");
@@ -224,8 +255,12 @@ function cancelUpdate(){
     cancel.style.display = "none";
     resetForm();
 }
+/**
+ * @description Updates the specified record
+ * @param {Number} rowNumber row number of the record to be updated
+ */
 function updateContact(rowNumber){
-    console.log(rowNumber);
+    console.log("updated record is: " + rowNumber);
     var _name = document.getElementById("name").value;
     var _phone = document.getElementById("phone").value;
     var _email = document.getElementById("email").value;
@@ -235,30 +270,17 @@ function updateContact(rowNumber){
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
-        var jsonContacts = contactList;//JSON.parse(localStorage.getItem("contacts"));
-        // console.log( typeof jsonContacts);
-        if(jsonContacts == null){
-            jsonContacts = [{
-                "name": _name, 
-                "phoneNumber": _phone, 
-                "email": _email, 
-                "dateOfBirth": _dob, 
-                "address": _address, 
-                "state": _state
-            }];
+        var jsonContacts = contactList;
+        var newContact = null;
+        if(jsonContacts.length == 0){
+            newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
         }
         else{
-            jsonContacts.splice(rowNumber, 1); //if not deleted anything
-            jsonContacts.splice(rowNumber, 0, {
-                "name": _name, 
-                "phoneNumber": _phone, 
-                "email": _email, 
-                "dateOfBirth": _dob, 
-                "address": _address, 
-                "state": _state
-            });
+            var newId = jsonContacts[rowNumber].id;
+            jsonContacts.splice(rowNumber, 1); //if not deleted anything -> delete is disabled while updating
+            newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
+            jsonContacts.splice(rowNumber, 0, newContact);
         }
-        // localStorage.setItem("contacts", JSON.stringify(jsonContacts));
         contactList = jsonContacts;
         var error = document.getElementById("Error-Msg");
         error.innerHTML = "Contact Updated";
@@ -268,19 +290,20 @@ function updateContact(rowNumber){
             error.style.display = "none";
         }, 5000);
         cancelUpdate();
-        // resetForm();
         loadContacts();
     }
     else{
         var error = document.getElementById("Error-Msg");
         error.style.display = "block";
-        // resetForm();
         setTimeout(function() {
-            error.innerHTML = null;
-            error.style.display = "none";
-        }, 5000);
+            // error.innerHTML = null;
+            // error.style.display = "none";
+        }, 3000);
     }
 }
+/**
+ * @description Adds new Contact
+ */
 function addContact(){
     var _name = document.getElementById("name").value;
     var _phone = document.getElementById("phone").value;
@@ -291,45 +314,17 @@ function addContact(){
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
-        var jsonContacts = contactList;//JSON.parse(localStorage.getItem("contacts"));
-        // console.log( typeof jsonContacts);
-        if(jsonContacts == null){
-            jsonContacts = [{
-                "name": _name, 
-                "phoneNumber": _phone, 
-                "email": _email, 
-                "dateOfBirth": _dob, 
-                "address": _address, 
-                "state": _state
-            }];
+        var jsonContacts = contactList;
+        var newContact = null;
+        if(jsonContacts.length == 0){
+            newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
         }
         else{
-            jsonContacts.push({
-                "name": _name, 
-                "phoneNumber": _phone, 
-                "email": _email, 
-                "dateOfBirth": _dob, 
-                "address": _address, 
-                "state": _state
-            });
-            // console.log(jsonContacts);
-            // var arrr = [];
-            // arrr.push(jsonContacts);
-            // arrr.push({
-            //     "name": _name, 
-            //     "phone": _phone, 
-            //     "email": _email
-            // });
-            // jsonContacts = arrr;
+            var newId = jsonContacts[jsonContacts.length-1].id;
+            newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
         }
-        // localStorage.setItem("contacts", JSON.stringify(jsonContacts));
+        jsonContacts.push(newContact);
         contactList = jsonContacts;
-
-        // console.log(jsonContacts);
-        // localStorage.setItem("name", _name);
-        // localStorage.setItem("phone", _phone);
-        // console.log(localStorage.getItem("name"));
-        // console.log(localStorage.getItem("phone"));
         var error = document.getElementById("Error-Msg");
         error.innerHTML = "Contact Added";
         error.style.display = "block";
@@ -342,17 +337,21 @@ function addContact(){
     }
     else{
         var error = document.getElementById("Error-Msg");
-        // error.innerHTML = "Error";
         error.style.display = "block";
-        // resetForm();
         setTimeout(function() {
-            error.innerHTML = null;
-            error.style.display = "none";
-        }, 5000);
+            // error.innerHTML = null;
+            // error.style.display = "none";
+        }, 3000);
     }
 }
+/**
+ * @description validates name, phone, email, dob
+ * @param {string} _name 
+ * @param {string} _phone 
+ * @param {string} _email 
+ * @param {string} _dob 
+ */
 function validateInput(_name, _phone, _email, _dob){
-    //TODO
     var error = document.getElementById("Error-Msg");
     if(_name.length == 0){
         error.innerHTML = "Name is Empty";
@@ -370,7 +369,7 @@ function validateInput(_name, _phone, _email, _dob){
         error.innerHTML = "Phone Number should be 10 digit";
         return false;
     }
-    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(_email))){
+    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/i.test(_email))){
         error.innerHTML = "InValid Email ID";
         return false;
     }
@@ -382,28 +381,24 @@ function validateInput(_name, _phone, _email, _dob){
         return true;
     }
 }
+/**
+ * @description Validates the date with min and max attribute
+ * @param {string} _dob 
+ */
 function checkDOB(_dob){
-    // var dat = _dob.split('-');
     var newDate = new Date(_dob);
-    // var yyyy = parseInt(dat[0]);
-    // var mm = parseInt(dat[1]);
-    // var dd = parseInt(dat[2]);
     var date = new Date();
     var minYear = date.getFullYear() - 100;
-    // var maxYear = date.getFullYear();
-    // var minMonth = 01;
-    // var maxMonth = 
     var minDate = new Date(minYear + "-01-01");
     if(!(newDate <= date && newDate >= minDate)){
         return false;
     }
-    // if(!(yyyy >= minYear & yyyy <= maxYear)){
-    //     // alert("ok");
-    //     return false;
-    // }
-    // console.log(dat);
     return true;
 }
+/**
+ * @description Validates the phone number
+ * @param {string} _phone 
+ */
 function isPhoneNumber(_phone){
     var flag = true;
     for (let index = 0; index < _phone.length; index++) {
@@ -414,6 +409,9 @@ function isPhoneNumber(_phone){
     };
     return flag;
 }
+/**
+ * @description Resets the input fields
+ */
 function resetForm(){
     document.getElementById("name").value = "";
     document.getElementById("phone").value = "";
@@ -423,42 +421,43 @@ function resetForm(){
     var stateOp = document.getElementById("state");
     stateOp.selectedIndex = 0;
 }
+/**
+ * @description Deletes all selected records
+ */
 function deleteSelected(){
-    var checkboxes = document.getElementsByName("select-contact");
-    var selectedCheckboxes = [];
-    for (let index = 0; index < checkboxes.length; index++) {
-        var element = checkboxes[index];
-        if(element.checked){
-            selectedCheckboxes.push(parseInt(element.value));
+    if(deleteFlag){
+        var checkboxes = document.getElementsByName("select-contact");
+        var selectedCheckboxes = [];
+        for (let index = 0; index < checkboxes.length; index++) {
+            var element = checkboxes[index];
+            if(element.checked){
+                selectedCheckboxes.push(parseInt(element.value));
+            }
+        }
+        if(selectedCheckboxes.length == 0){
+            alert("Select any one record to proceed..!");
+        }
+        else{
+            if(confirm("Confirm Delete ?")){
+                var jsonContacts = contactList;
+                var tempContacts = [];
+                var it = 0;
+                console.log(selectedCheckboxes);
+                jsonContacts.forEach(function(contact) {
+                    if(selectedCheckboxes.includes(it)){
+                        //Continue
+                    }
+                    else{
+                        tempContacts.push(contact);
+                    }
+                    it ++;
+                });
+                contactList = tempContacts;
+                loadContacts();
+            }
         }
     }
-    if(selectedCheckboxes.length == 0){
-        alert("Select any one record to proceed..!");
-    }
     else{
-        var jsonContacts = contactList;//JSON.parse(localStorage.getItem("contacts"));
-        var tempContacts = [];
-        // selectedCheckboxes.forEach(value => {
-        //     // jsonContacts.slice(value, 1);
-        //     alert(value);
-        // });
-        var it = 0;
-        console.log(selectedCheckboxes);
-        jsonContacts.forEach(function(contact) {
-            if(selectedCheckboxes.includes(it)){ // if it present in selectedCheckboxes
-            // if(it in selectedCheckboxes){ // checks index
-                //Nothing to do
-                // console.log(it);
-            }
-            else{
-                tempContacts.push(contact);
-                // console.log(contact.name);
-            }
-            it ++;
-        });
-        contactList = jsonContacts;
-        // jsonContacts = tempContacts;
-        // localStorage.setItem("contacts", JSON.stringify(jsonContacts));
-        loadContacts();
+        alert("Can't delete while updating");
     }
 }

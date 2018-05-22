@@ -16,9 +16,6 @@ body {
     width: 30%;
     float: left;
 }
-/*#form {
-    background-color: #58B19F;
-}*/
 #view-point {
     width: 70%;
     float: left;
@@ -60,22 +57,9 @@ input[type="checkbox"] {
 .opt-btn {
     background-color: aquamarine;
 }
-/*#sort {
-
-}
-#sort-rev {
-
-}*/
 #list {
     width: 100%;
-    /*border-style: solid;*/
 }
-/*#list tr:nth-child(odd) {
-    background-color: #CAD3C8;
-}
-#list tr:nth-child(even) {
-    background-color: #ffffff;
-}*/
 #list thead tr:first-child {
     background-color: aquamarine;
 }
