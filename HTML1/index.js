@@ -330,8 +330,9 @@ function validateInput(_name, _phone, _email, _dob){
     else if(_phone.length < 10){
         error.innerHTML = "Phone Number should be 10 digit";
         return false;
-    }
-    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))){ //redo pattern for email
+    } 
+    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))){
+        // ^([a-zA-Z0-9]|_(?=[a-zA-Z0-9]))[a-zA-Z0-9]*([_\.-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_-][a-zA-Z0-9]+)*((\.[a-zA-Z0-9]+)+){1,2}$
         error.innerHTML = "InValid Email ID";
         return false;
     }
