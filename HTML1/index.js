@@ -79,16 +79,20 @@ window.onload = function (){
     var deleteBtn = document.getElementById("Delete");
     deleteBtn.onclick = deleteSelected;
     var selectAll = document.getElementById("Select-All");
-    selectAll.onclick = selectAllContacts;
+    selectAll.onclick = function(){
+        selectDeselect(true);
+    };
     var unSelectAll = document.getElementById("UnSelect-All");
-    unSelectAll.onclick = deSelectAllContacts;
+    unSelectAll.onclick = function(){
+        selectDeselect(false);
+    };
     var add_Contact = document.getElementById("Add-Contact");
     add_Contact.onclick = addContact;
     var reset = document.getElementById("Reset");
     reset.onclick = resetForm;
 }
 /**
- * @description sets min attribute of date input field
+ * @description sets min attribute for date of birth field
  */
 function setMinDate(){
     var minDate = new Date();
@@ -99,7 +103,7 @@ function setMinDate(){
     document.getElementById("dob").setAttribute("min", minDate);
 }
 /**
- * @description sets max attribute of date input field
+ * @description sets max attribute for date of birth field
  */
 function setMaxData(){
     var today = new Date();
@@ -116,42 +120,30 @@ function setMaxData(){
     document.getElementById("dob").setAttribute("max", today);
 }
 /**
- * @description unselects all contacts
+ * @description select / deselect toggle for all checkboxes
  */
-function deSelectAllContacts(){
+function selectDeselect(status){
     var checkboxes = document.getElementsByName("select-contact");
     var selectedCheckboxes = [];
     for (let index = 0; index < checkboxes.length; index++) {
         var element = checkboxes[index];
-        element.checked = false;
-    }
-}
-/**
- * @description selects all contacts
- */
-function selectAllContacts(){
-    var checkboxes = document.getElementsByName("select-contact");
-    var selectedCheckboxes = [];
-    for (let index = 0; index < checkboxes.length; index++) {
-        var element = checkboxes[index];
-        element.checked = true;
+        element.checked = status;
     }
 }
 /**
  * @description displays the JSON Object into Table format
  */
 function loadContacts(){
-    var jsonContacts = contactList;
-    if(jsonContacts != null && jsonContacts.length > 0){
+    if(contactList.length > 0){
         var tableContent = "<table id=\"list\" border=\"1\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
         var tempData = "";
         var chkboc_value = 0;
-        jsonContacts.forEach(function(contact) {
-            var tempState = contact.state;
-            if(contact.state == "Select State"){
+        contactList.forEach(function(contact) {
+            var tempState = contact.getState();
+            if(tempState == "Select State"){
                 tempState = "";
             }
-            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td>&nbsp;<img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" >&nbsp;&nbsp;<img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.getName() + "</td>" + "<td>" + contact.getPhoneNumber() + "</td>" + "<td>" + contact.getEmail() + "</td>" + "<td>" + contact.getDateOfBirth() + "</td>" + "<td>" + contact.getAddress() + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
             chkboc_value ++;
         });
         tableContent += tempData;
@@ -159,7 +151,7 @@ function loadContacts(){
         contacts.innerHTML = tableContent;
     }
     else{
-        contacts.innerHTML = "";
+        contacts.innerHTML = "Empty";
     }
 }
 /**
@@ -188,19 +180,7 @@ function deleteUpdateUtil(clickedImg){
  */
 function deleteContact(rowNumber){
     if(confirm("Confirm Delete ?")){
-        var jsonContacts = contactList;
-        var tempContacts = [];
-        var it = 0;
-        jsonContacts.forEach(function(contact) {
-            if(it == rowNumber){
-                //Continue
-            }
-            else{
-                tempContacts.push(contact);
-            }
-            it ++;
-        });
-        contactList = tempContacts;
+        contactList.splice(rowNumber, 1);
         loadContacts();
     }
 }
@@ -270,18 +250,10 @@ function updateContact(rowNumber){
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
-        var jsonContacts = contactList;
-        var newContact = null;
-        if(jsonContacts.length == 0){
-            newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
-        }
-        else{
-            var newId = jsonContacts[rowNumber].id;
-            jsonContacts.splice(rowNumber, 1); //if not deleted anything -> delete is disabled while updating
-            newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
-            jsonContacts.splice(rowNumber, 0, newContact);
-        }
-        contactList = jsonContacts;
+        var newId = contactList[rowNumber].id;
+        contactList.splice(rowNumber, 1);
+        var newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
+        contactList.splice(rowNumber, 0, newContact);
         var error = document.getElementById("Error-Msg");
         error.innerHTML = "Contact Updated";
         error.style.display = "block";
@@ -295,10 +267,6 @@ function updateContact(rowNumber){
     else{
         var error = document.getElementById("Error-Msg");
         error.style.display = "block";
-        setTimeout(function() {
-            // error.innerHTML = null;
-            // error.style.display = "none";
-        }, 3000);
     }
 }
 /**
@@ -314,17 +282,15 @@ function addContact(){
         var _address = document.getElementById("address").value;
         var stateOp = document.getElementById("state");
         var _state = stateOp.options[stateOp.selectedIndex].text;
-        var jsonContacts = contactList;
         var newContact = null;
-        if(jsonContacts.length == 0){
+        if(contactList.length == 0){
             newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
         }
         else{
-            var newId = jsonContacts[jsonContacts.length-1].id;
+            var newId = contactList[contactList.length-1].id;
             newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
         }
-        jsonContacts.push(newContact);
-        contactList = jsonContacts;
+        contactList.push(newContact);
         var error = document.getElementById("Error-Msg");
         error.innerHTML = "Contact Added";
         error.style.display = "block";
@@ -338,10 +304,6 @@ function addContact(){
     else{
         var error = document.getElementById("Error-Msg");
         error.style.display = "block";
-        setTimeout(function() {
-            // error.innerHTML = null;
-            // error.style.display = "none";
-        }, 3000);
     }
 }
 /**
@@ -369,7 +331,7 @@ function validateInput(_name, _phone, _email, _dob){
         error.innerHTML = "Phone Number should be 10 digit";
         return false;
     }
-    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/i.test(_email))){
+    else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))){ //redo pattern for email
         error.innerHTML = "InValid Email ID";
         return false;
     }
@@ -439,11 +401,10 @@ function deleteSelected(){
         }
         else{
             if(confirm("Confirm Delete ?")){
-                var jsonContacts = contactList;
                 var tempContacts = [];
                 var it = 0;
                 console.log(selectedCheckboxes);
-                jsonContacts.forEach(function(contact) {
+                contactList.forEach(function(contact) {
                     if(selectedCheckboxes.includes(it)){
                         //Continue
                     }

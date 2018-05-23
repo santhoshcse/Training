@@ -35,18 +35,15 @@ input[type="checkbox"] {
     color: red;
 }
 #contacts-list {
-    background-color: #CAD3C8;
+    overflow: auto;
+    height: 500px;
+    width: 100%;
 }
 #Error-Msg {
     color: red;
     height: 30px;
     width: 75%;
     display: none;
-}
-.scrollit {
-    overflow: auto;
-    height: 500px;
-    width: 100%;
 }
 #Reset {
     display: block;
@@ -60,6 +57,12 @@ input[type="checkbox"] {
 #list {
     width: 100%;
 }
-#list thead tr:first-child {
+#list thead {
     background-color: aquamarine;
+}
+#list td {
+    text-align: center;
+}
+#list tbody tr:hover {
+    background-color: #F8EFBA;
 }

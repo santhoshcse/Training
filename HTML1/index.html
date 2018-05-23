@@ -35,7 +35,7 @@
                         </tr>
                         <tr>
                             <td><label for="address">Address</label></td>
-                            <td><input type="text" id="address" size="24"></td>
+                            <td><textarea id="address" rows="3" cols="26"></textarea></td>
                         </tr>
                         <tr>
                             <td><label for="state">State</label></td>
@@ -104,11 +104,11 @@
         <div id="view-point">
             <div id="option-header">
                 <input id="Select-All" type="button" class="opt-btn" value="Select All">
-                <input id="Delete" type="button" class="opt-btn" value="Delete Selected">
                 <input id="UnSelect-All" type="button" class="opt-btn" value="Deselect All">
+                <input id="Delete" type="button" class="opt-btn" value="Delete" title="Delete Selected Rows">
             </div>
             <br>
-            <div id="contacts-list" class="scrollit">
+            <div id="contacts-list">
             </div>
         </div>
     </div>
