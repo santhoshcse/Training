@@ -1,5 +1,5 @@
 /**
- * @description Contact Class
+ * @description Contact POCO Class
  */
 class Contact {
     constructor(id, name, phoneNumber, email, dateOfBirth, address, state) {
@@ -58,7 +58,7 @@ class Contact {
     }
 }
 // Holds complete contacts list
-contactList = [];
+var contactList = [];
 //Global Variables
 var contacts = null;
 var deleteFlag = true;
@@ -124,7 +124,6 @@ function setMaxData(){
  */
 function selectDeselect(status){
     var checkboxes = document.getElementsByName("select-contact");
-    var selectedCheckboxes = [];
     for (let index = 0; index < checkboxes.length; index++) {
         var element = checkboxes[index];
         element.checked = status;
@@ -172,7 +171,20 @@ function deleteUpdateUtil(clickedImg){
     else if(cmd[1] == "update"){
         toUpdate(rowNumber);
         deleteFlag = false;
+        clickable("none");
     }
+}
+/**
+ * @description makes all delete icons unclickable while updating and clickable after updation is done
+ */
+function clickable(pointerEvent){
+    var dIcon = document.getElementsByClassName("delete-icon");
+    for (let index = 0; index < dIcon.length; index++) {
+        const element = dIcon[index];
+        element.style.pointerEvents = pointerEvent;
+    }
+    var del = document.getElementById("Delete");
+    del.style.pointerEvents = pointerEvent;
 }
 /**
  * @description Deletes the specified record
@@ -234,13 +246,26 @@ function cancelUpdate(){
     var cancel = document.getElementById("Cancel");
     cancel.style.display = "none";
     resetForm();
+    clickable("auto");
+}
+/**
+ * @description shows notification message for contact creation and updation
+ * @param {string} message notification message for creation and updation
+ */
+function showNotification(message){
+    var error = document.getElementById("Error-Msg");
+    error.innerHTML = message;
+    error.style.display = "block";
+    setTimeout(function() {
+        error.innerHTML = null;
+        error.style.display = "none";
+    }, 5000);
 }
 /**
  * @description Updates the specified record
  * @param {Number} rowNumber row number of the record to be updated
  */
 function updateContact(rowNumber){
-    console.log("updated record is: " + rowNumber);
     var _name = document.getElementById("name").value;
     var _phone = document.getElementById("phone").value;
     var _email = document.getElementById("email").value;
@@ -254,13 +279,7 @@ function updateContact(rowNumber){
         contactList.splice(rowNumber, 1);
         var newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
         contactList.splice(rowNumber, 0, newContact);
-        var error = document.getElementById("Error-Msg");
-        error.innerHTML = "Contact Updated";
-        error.style.display = "block";
-        setTimeout(function() {
-            error.innerHTML = null;
-            error.style.display = "none";
-        }, 5000);
+        showNotification("Contact Updated");
         cancelUpdate();
         loadContacts();
     }
@@ -291,13 +310,7 @@ function addContact(){
             newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
         }
         contactList.push(newContact);
-        var error = document.getElementById("Error-Msg");
-        error.innerHTML = "Contact Added";
-        error.style.display = "block";
-        setTimeout(function() {
-            error.innerHTML = null;
-            error.style.display = "none";
-        }, 5000);
+        showNotification("Contact Added");
         resetForm();
         loadContacts();
     }
@@ -369,7 +382,7 @@ function isPhoneNumber(_phone){
             flag = false;
             break;
         }
-    };
+    }
     return flag;
 }
 /**
