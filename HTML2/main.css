@@ -1,0 +1,71 @@
+body {
+    background-color: #CAD3C8;
+}
+#header {
+    width: 100%;
+    background-color: aquamarine;
+}
+#site-title {
+    color: blue;
+    text-align: center;
+}
+#body {
+    width: 100%;
+}
+#create-update-form {
+    width: 30%;
+    float: left;
+}
+#view-point {
+    width: 70%;
+    float: left;
+}
+input[type="checkbox"] {
+    width: 25px; 
+    height: 25px; 
+}
+#Update-Contact {
+    display: none;
+}
+#Add-Contact {
+    display: block;
+}
+.required::after {
+    content: " *";
+    color: red;
+}
+#contacts-list {
+    overflow: auto;
+    height: 500px;
+    width: 100%;
+}
+#Error-Msg {
+    color: red;
+    height: 30px;
+    width: 75%;
+    display: none;
+}
+#Reset {
+    display: block;
+}
+#Cancel {
+    display: none;
+}
+.opt-btn {
+    background-color: aquamarine;
+}
+#list {
+    width: 100%;
+}
+#list thead {
+    background-color: aquamarine;
+}
+#list td {
+    text-align: center;
+}
+#list tbody tr:hover {
+    background-color: #F8EFBA;
+}
+#address {
+    resize: none;
+}
