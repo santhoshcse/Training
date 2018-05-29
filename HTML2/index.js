@@ -87,7 +87,7 @@ function setMaxData(){
  * @description select / deselect toggle for all checkboxes
  */
 function selectDeselect(status){
-    var checkboxes = document.getElementsByName("select-contact");
+    var checkboxes = $('[name=select-contact]');
     for (let index = 0; index < checkboxes.length; index++) {
         var element = checkboxes[index];
         element.checked = status;
@@ -180,32 +180,34 @@ function toUpdate(rowNumber){
     else{
         stateOp.val(jsonContacts[rowNumber].state);
     }
-    var add_Contact = document.getElementById("Add-Contact");
-    add_Contact.style.display = "none";
-    var update_Contact = document.getElementById("Update-Contact");
-    update_Contact.style.display = "block";
-    var reset = document.getElementById("Reset");
-    reset.style.display = "none";
-    var cancel = document.getElementById("Cancel");
-    cancel.style.display = "block";
-    cancel.onclick = cancelUpdate;
-    update_Contact.onclick = function(){
+    var add_Contact = $("#Add-Contact");
+    add_Contact.css("display", "none");
+    var update_Contact = $("#Update-Contact");
+    update_Contact.css("display", "block");
+    var reset = $("#Reset");
+    reset.css("display", "none");
+    var cancel = $("#Cancel");
+    cancel.css("display", "block");
+    cancel.click(function(){
+        cancelUpdate();
+    });
+    update_Contact.click(function(){
         updateContact(rowNumber);
-    }
+    });
 }
 /**
  * @description Cancel the Update Operation
  */
 function cancelUpdate(){
     deleteFlag = true;
-    var add_Contact = document.getElementById("Add-Contact");
-    add_Contact.style.display = "block";
-    var update_Contact = document.getElementById("Update-Contact");
-    update_Contact.style.display = "none";
-    var reset = document.getElementById("Reset");
-    reset.style.display = "block";
-    var cancel = document.getElementById("Cancel");
-    cancel.style.display = "none";
+    var add_Contact = $("#Add-Contact");
+    add_Contact.css("display", "block");
+    var update_Contact = $("#Update-Contact");
+    update_Contact.css("display", "none");
+    var reset = $("#Reset");
+    reset.css("display", "block");
+    var cancel = $("#Cancel");
+    cancel.css("display", "none");
     resetForm();
     clickable("auto");
 }
@@ -233,9 +235,9 @@ function updateContact(rowNumber){
     var _dob = $("#dob").val();
     var isValid = validateInput(_name, _phone, _email, _dob);
     if(isValid){
-        var _address = $("#address").val();
-        var stateOp = document.getElementById("state");
-        var _state = stateOp.options[stateOp.selectedIndex].text;
+        var _address = $('#address').val();
+        var stateOp = $("#state");
+        var _state = stateOp.val();
         var newId = contactList[rowNumber].id;
         contactList.splice(rowNumber, 1);
         var newContact = newObject(newId, _name, _phone, _email, _dob, _address, _state);
@@ -260,14 +262,13 @@ function addContact(){
     var isValid = validateInput(_name, _phone, _email, _dob);
     if(isValid){
         var _address = $("#address").val();
-        var stateOp = document.getElementById("state");
-        var _state = stateOp.options[stateOp.selectedIndex].text;
+        var _state = $("#state").val();
         var newContact = null;
         if(contactList.length == 0){
             newContact = newObject(1, _name, _phone, _email, _dob, _address, _state);
         }
         else{
-            var newId = contactList[contactList.length-1].id;
+            var newId = contactList[contactList.length-1].id+1;
             newContact = newObject(newId, _name, _phone, _email, _dob, _address, _state);
         }
         contactList.push(newContact);
@@ -360,7 +361,7 @@ function resetForm(){
  */
 function deleteSelected(){
     if(deleteFlag){
-        var checkboxes = document.getElementsByName("select-contact");
+        var checkboxes = $("[name=select-contact]");
         var selectedCheckboxes = [];
         for (let index = 0; index < checkboxes.length; index++) {
             var element = checkboxes[index];
