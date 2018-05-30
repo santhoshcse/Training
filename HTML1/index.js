@@ -306,7 +306,7 @@ function addContact(){
             newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
         }
         else{
-            var newId = contactList[contactList.length-1].id;
+            var newId = contactList[contactList.length-1].id+1;
             newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
         }
         contactList.push(newContact);

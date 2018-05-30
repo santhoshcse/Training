@@ -98,7 +98,7 @@ var ContactManager = {
                 if(tempState == "Select State"){
                     tempState = "";
                 }
-                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
                 chkboc_value ++;
             });
             tableContent += tempData;
@@ -206,9 +206,9 @@ var ContactManager = {
             var stateOp = document.getElementById(ContactManager.selectors.state);
             var _state = stateOp.options[stateOp.selectedIndex].text;
             var newId = ContactManager.contactList[rowNumber].id;
-            ContactManager.contactList.splice(rowNumber, 1);
+            // ContactManager.contactList.splice(rowNumber, 1);
             var newContact = ContactManager.newObject(newId, _name, _phone, _email, _dob, _address, _state);
-            ContactManager.contactList.splice(rowNumber, 0, newContact);
+            ContactManager.contactList.splice(rowNumber, 1, newContact);//0
             ContactManager.showNotification("Contact Updated");
             ContactManager.cancelUpdate();
             ContactManager.loadContacts();
@@ -233,7 +233,7 @@ var ContactManager = {
                 newContact = ContactManager.newObject(1, _name, _phone, _email, _dob, _address, _state);
             }
             else{
-                var newId = ContactManager.contactList[ContactManager.contactList.length-1].id;
+                var newId = ContactManager.contactList[ContactManager.contactList.length-1].id+1;
                 newContact = ContactManager.newObject(newId, _name, _phone, _email, _dob, _address, _state);
             }
             ContactManager.contactList.push(newContact);

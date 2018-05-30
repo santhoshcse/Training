@@ -3,6 +3,7 @@ var contactList = [];
 //Global Variables
 var contacts = null;
 var deleteFlag = true;
+var currentRecord = -1;
 /**
  * @description returns new Contact Object using Object Literal
  * @param {integer} id 
@@ -37,7 +38,7 @@ $(function(){
     //Events
     contacts = $("#contacts-list");
     console.log(contacts);
-    setMaxData();
+    setMaxDate();
     setMinDate();
     loadContacts();
     var deleteBtn = $("#Delete");
@@ -69,7 +70,7 @@ function setMinDate(){
 /**
  * @description sets max attribute for date of birth field
  */
-function setMaxData(){
+function setMaxDate(){
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
@@ -106,7 +107,7 @@ function loadContacts(){
             if(tempState == "Select State"){
                 tempState = "";
             }
-            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"deleteUpdateUtil(id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+            tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
             chkboc_value ++;
         });
         tableContent += tempData;
@@ -123,17 +124,19 @@ function loadContacts(){
  */
 function deleteUpdateUtil(clickedImg){
     var rowNumber = parseInt(clickedImg);
+    currentRecord = rowNumber;
     var cmd = clickedImg.split('-');
+    // var rNo = parseInt(cmd[0]);
     if(cmd[1] == "delete"){
         if(deleteFlag){
-            deleteContact(rowNumber);
+            deleteContact();//rowNumber
         }
         else{
             alert("Can't delete while updating");
         }
     }
     else if(cmd[1] == "update"){
-        toUpdate(rowNumber);
+        toUpdate();//rowNumber
         deleteFlag = false;
         clickable("none");
     }
@@ -151,9 +154,9 @@ function clickable(pointerEvent){
  * @description Deletes the specified record
  * @param {Number} rowNumber row number of the record to be deleted
  */
-function deleteContact(rowNumber){
+function deleteContact(){//rowNumber
     if(confirm("Confirm Delete ?")){
-        contactList.splice(rowNumber, 1);
+        contactList.splice(currentRecord, 1);//rowNumber
         loadContacts();
     }
 }
@@ -161,38 +164,38 @@ function deleteContact(rowNumber){
  * @description Makes Specified Record's data to edit
  * @param {Number} rowNumber 
  */
-function toUpdate(rowNumber){
+function toUpdate(){//rowNumber
     var jsonContacts = contactList;
     var _name = $("#name");
-    _name.val(jsonContacts[rowNumber].name);
+    _name.val(jsonContacts[currentRecord].name);//rowNumber
     var _phone = $("#phone");
-    _phone.val(jsonContacts[rowNumber].phoneNumber);
+    _phone.val(jsonContacts[currentRecord].phoneNumber);//rowNumber
     var _email = $("#email");
-    _email.val(jsonContacts[rowNumber].email);
+    _email.val(jsonContacts[currentRecord].email);//rowNumber
     var _dob = $("#dob");
-    _dob.val(jsonContacts[rowNumber].dateOfBirth);
+    _dob.val(jsonContacts[currentRecord].dateOfBirth);//rowNumber
     var _address = $("#address");
-    _address.val(jsonContacts[rowNumber].address);
+    _address.val(jsonContacts[currentRecord].address);//rowNumber
     var stateOp = $("#state");
-    if(jsonContacts[rowNumber].state == "Select State"){
+    if(jsonContacts[currentRecord].state == "Select State"){//rowNumber
         stateOp.prop('selectedIndex', 0);
     }
     else{
-        stateOp.val(jsonContacts[rowNumber].state);
+        stateOp.val(jsonContacts[currentRecord].state);//rowNumber
     }
     var add_Contact = $("#Add-Contact");
-    add_Contact.css("display", "none");
+    add_Contact.hide();
     var update_Contact = $("#Update-Contact");
-    update_Contact.css("display", "block");
+    update_Contact.show();
     var reset = $("#Reset");
-    reset.css("display", "none");
+    reset.hide();
     var cancel = $("#Cancel");
-    cancel.css("display", "block");
+    cancel.show();
     cancel.click(function(){
         cancelUpdate();
     });
     update_Contact.click(function(){
-        updateContact(rowNumber);
+        updateContact();//rowNumber
     });
 }
 /**
@@ -201,13 +204,13 @@ function toUpdate(rowNumber){
 function cancelUpdate(){
     deleteFlag = true;
     var add_Contact = $("#Add-Contact");
-    add_Contact.css("display", "block");
+    add_Contact.show();
     var update_Contact = $("#Update-Contact");
-    update_Contact.css("display", "none");
+    update_Contact.hide();
     var reset = $("#Reset");
-    reset.css("display", "block");
+    reset.show();
     var cancel = $("#Cancel");
-    cancel.css("display", "none");
+    cancel.hide();
     resetForm();
     clickable("auto");
 }
@@ -218,17 +221,17 @@ function cancelUpdate(){
 function showNotification(message){
     var error = $("#Error-Msg");
     error.html(message);
-    error.css("display", "block");
+    error.show();
     setTimeout(function() {
-        error.html(null);
-        error.css("display", "none");
+        error.html(null);//""
+        error.hide();
     }, 5000);
 }
 /**
  * @description Updates the specified record
  * @param {Number} rowNumber row number of the record to be updated
  */
-function updateContact(rowNumber){
+function updateContact(){//rowNumber
     var _name = $("#name").val();
     var _phone = $("#phone").val();
     var _email = $("#email").val();
@@ -236,19 +239,18 @@ function updateContact(rowNumber){
     var isValid = validateInput(_name, _phone, _email, _dob);
     if(isValid){
         var _address = $('#address').val();
-        var stateOp = $("#state");
-        var _state = stateOp.val();
-        var newId = contactList[rowNumber].id;
-        contactList.splice(rowNumber, 1);
+        var _state = $("#state").val();
+        var newId = contactList[currentRecord].id;//rowNumber
+        // contactList.splice(rowNumber, 1);
         var newContact = newObject(newId, _name, _phone, _email, _dob, _address, _state);
-        contactList.splice(rowNumber, 0, newContact);
+        contactList.splice(currentRecord, 1, newContact);//0 //rowNumber
         showNotification("Contact Updated");
         cancelUpdate();
         loadContacts();
     }
     else{
         var error = $("#Error-Msg");
-        error.css("display", "block");
+        error.show();
     }
 }
 /**
@@ -278,7 +280,7 @@ function addContact(){
     }
     else{
         var error = $("#Error-Msg");
-        error.css("display", "block");
+        error.show();
     }
 }
 /**
@@ -378,10 +380,7 @@ function deleteSelected(){
                 var it = 0;
                 console.log(selectedCheckboxes);
                 contactList.forEach(function(contact) {
-                    if(selectedCheckboxes.includes(it)){
-                        //Continue
-                    }
-                    else{
+                    if(!selectedCheckboxes.includes(it)){
                         tempContacts.push(contact);
                     }
                     it ++;
