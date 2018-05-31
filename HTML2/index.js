@@ -1,7 +1,7 @@
 // Holds complete contacts list
 var contactList = [];
 //Global Variables
-var contacts = null;
+var $contacts = null;
 var deleteFlag = true;
 var currentRecord = -1;
 /**
@@ -23,7 +23,7 @@ function newObject(id, name, phoneNumber, email, dateOfBirth, address, state){
         dateOfBirth,
         address,
         state
-    }
+    };
     return Contact;
 }
 /**
@@ -36,25 +36,25 @@ $(function(){
     newContact = newObject(2, "Kumar", 9003689126, "gsaku0092@gmail.com", "2018-04-21", "Chennai", "Tamil Nadu");
     contactList.push(newContact);
     //Events
-    contacts = $("#contacts-list");
-    console.log(contacts);
+    $contacts = $("#contacts-list");
+    console.log($contacts);
     setMaxDate();
     setMinDate();
     loadContacts();
-    var deleteBtn = $("#Delete");
-    deleteBtn.click(deleteSelected);
-    var selectAll = $("#Select-All");
-    selectAll.click(function(){
+    var $deleteBtn = $("#Delete");
+    $deleteBtn.click(deleteSelected);
+    var $selectAll = $("#Select-All");
+    $selectAll.click(function(){
         selectDeselect(true);
     });
-    var unSelectAll = $("#UnSelect-All");
-    unSelectAll.click(function(){
+    var $unSelectAll = $("#UnSelect-All");
+    $unSelectAll.click(function(){
         selectDeselect(false);
     });
-    var add_Contact = $("#Add-Contact");
-    add_Contact.click(addContact);
-    var reset = $("#Reset");
-    reset.click(resetForm);
+    var $add_Contact = $("#Add-Contact");
+    $add_Contact.click(addContact);
+    var $reset = $("#Reset");
+    $reset.click(resetForm);
 });
 /**
  * @description sets min attribute for date of birth field
@@ -88,10 +88,10 @@ function setMaxDate(){
  * @description select / deselect toggle for all checkboxes
  */
 function selectDeselect(status){
-    var checkboxes = $('[name=select-contact]');
-    for (let index = 0; index < checkboxes.length; index++) {
-        var element = checkboxes[index];
-        element.checked = status;
+    var $checkboxes = $('[name=select-contact]');
+    for (let index = 0; index < $checkboxes.length; index++) {
+        var $element = $checkboxes[index];
+        $element.checked = status;
     }
 }
 /**
@@ -112,10 +112,10 @@ function loadContacts(){
         });
         tableContent += tempData;
         tableContent += "</tbody></table>";
-        contacts.html(tableContent);
+        $contacts.html(tableContent);
     }
     else{
-        contacts.html("Empty");
+        $contacts.html("Empty");
     }
 }
 /**
@@ -145,10 +145,10 @@ function deleteUpdateUtil(clickedImg){
  * @description makes all delete icons unclickable while updating and clickable after updation is done
  */
 function clickable(pointerEvent){
-    var dIcon = $(".delete-icon");
-    dIcon.css("pointerEvents", pointerEvent);
-    var del = $("#Delete");
-    del.css("pointerEvents", pointerEvent);
+    var $dIcon = $(".delete-icon");
+    $dIcon.css("pointerEvents", pointerEvent);
+    var $del = $("#Delete");
+    $del.css("pointerEvents", pointerEvent);
 }
 /**
  * @description Deletes the specified record
@@ -166,35 +166,35 @@ function deleteContact(){//rowNumber
  */
 function toUpdate(){//rowNumber
     var jsonContacts = contactList;
-    var _name = $("#name");
-    _name.val(jsonContacts[currentRecord].name);//rowNumber
-    var _phone = $("#phone");
-    _phone.val(jsonContacts[currentRecord].phoneNumber);//rowNumber
-    var _email = $("#email");
-    _email.val(jsonContacts[currentRecord].email);//rowNumber
-    var _dob = $("#dob");
-    _dob.val(jsonContacts[currentRecord].dateOfBirth);//rowNumber
-    var _address = $("#address");
-    _address.val(jsonContacts[currentRecord].address);//rowNumber
-    var stateOp = $("#state");
+    var $_name = $("#name");
+    $_name.val(jsonContacts[currentRecord].name);//rowNumber
+    var $_phone = $("#phone");
+    $_phone.val(jsonContacts[currentRecord].phoneNumber);//rowNumber
+    var $_email = $("#email");
+    $_email.val(jsonContacts[currentRecord].email);//rowNumber
+    var $_dob = $("#dob");
+    $_dob.val(jsonContacts[currentRecord].dateOfBirth);//rowNumber
+    var $_address = $("#address");
+    $_address.val(jsonContacts[currentRecord].address);//rowNumber
+    var $stateOp = $("#state");
     if(jsonContacts[currentRecord].state == "Select State"){//rowNumber
-        stateOp.prop('selectedIndex', 0);
+        $stateOp.prop('selectedIndex', 0);
     }
     else{
-        stateOp.val(jsonContacts[currentRecord].state);//rowNumber
+        $stateOp.val(jsonContacts[currentRecord].state);//rowNumber
     }
-    var add_Contact = $("#Add-Contact");
-    add_Contact.hide();
-    var update_Contact = $("#Update-Contact");
-    update_Contact.show();
-    var reset = $("#Reset");
-    reset.hide();
-    var cancel = $("#Cancel");
-    cancel.show();
-    cancel.click(function(){
+    var $add_Contact = $("#Add-Contact");
+    $add_Contact.hide();
+    var $update_Contact = $("#Update-Contact");
+    $update_Contact.show();
+    var $reset = $("#Reset");
+    $reset.hide();
+    var $cancel = $("#Cancel");
+    $cancel.show();
+    $cancel.click(function(){
         cancelUpdate();
     });
-    update_Contact.click(function(){
+    $update_Contact.click(function(){
         updateContact();//rowNumber
     });
 }
@@ -203,14 +203,14 @@ function toUpdate(){//rowNumber
  */
 function cancelUpdate(){
     deleteFlag = true;
-    var add_Contact = $("#Add-Contact");
-    add_Contact.show();
-    var update_Contact = $("#Update-Contact");
-    update_Contact.hide();
-    var reset = $("#Reset");
-    reset.show();
-    var cancel = $("#Cancel");
-    cancel.hide();
+    var $add_Contact = $("#Add-Contact");
+    $add_Contact.show();
+    var $update_Contact = $("#Update-Contact");
+    $update_Contact.hide();
+    var $reset = $("#Reset");
+    $reset.show();
+    var $cancel = $("#Cancel");
+    $cancel.hide();
     resetForm();
     clickable("auto");
 }
@@ -219,12 +219,12 @@ function cancelUpdate(){
  * @param {string} message notification message for creation and updation
  */
 function showNotification(message){
-    var error = $("#Error-Msg");
-    error.html(message);
-    error.show();
+    var $error = $("#Error-Msg");
+    $error.html(message);
+    $error.show();
     setTimeout(function() {
-        error.html(null);//""
-        error.hide();
+        $error.html(null);//""
+        $error.hide();
     }, 5000);
 }
 /**
@@ -249,8 +249,8 @@ function updateContact(){//rowNumber
         loadContacts();
     }
     else{
-        var error = $("#Error-Msg");
-        error.show();
+        var $error = $("#Error-Msg");
+        $error.show();
     }
 }
 /**
@@ -279,8 +279,8 @@ function addContact(){
         loadContacts();
     }
     else{
-        var error = $("#Error-Msg");
-        error.show();
+        var $error = $("#Error-Msg");
+        $error.show();
     }
 }
 /**
@@ -291,29 +291,29 @@ function addContact(){
  * @param {string} _dob 
  */
 function validateInput(_name, _phone, _email, _dob){
-    var error = $("#Error-Msg");
+    var $error = $("#Error-Msg");
     if(_name.length == 0){
-        error.html("Name is Empty");
+        $error.html("Name is Empty");
         return false;
     }
     else if(_phone.length == 0){
-        error.html("Phone Number is Empty");
+        $error.html("Phone Number is Empty");
         return false;
     }
     else if(!isPhoneNumber(_phone)){
-        error.html("Phone Number should have only digits");
+        $error.html("Phone Number should have only digits");
         return false;
     }
     else if(_phone.length < 10){
-        error.html("Phone Number should be 10 digit");
+        $error.html("Phone Number should be 10 digit");
         return false;
     } 
     else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))){
-        error.html("InValid Email ID");
+        $error.html("InValid Email ID");
         return false;
     }
     else if(_dob != "" && !checkDOB(_dob)){
-        error.html("DOB is Invalid");
+        $error.html("DOB is Invalid");
         return false;
     }
     return true;
@@ -355,20 +355,20 @@ function resetForm(){
     $("#email").val("");
     $("#dob").val("");
     $("#address").val("");
-    var stateOp = $("#state");
-    stateOp.prop('selectedIndex', 0);
+    var $stateOp = $("#state");
+    $stateOp.prop('selectedIndex', 0);
 }
 /**
  * @description Deletes all selected records
  */
 function deleteSelected(){
     if(deleteFlag){
-        var checkboxes = $("[name=select-contact]");
+        var $checkboxes = $("[name=select-contact]");
         var selectedCheckboxes = [];
-        for (let index = 0; index < checkboxes.length; index++) {
-            var element = checkboxes[index];
-            if(element.checked){
-                selectedCheckboxes.push(parseInt(element.value));
+        for (let index = 0; index < $checkboxes.length; index++) {
+            var $element = $checkboxes[index];
+            if($element.checked){
+                selectedCheckboxes.push(parseInt($element.value));
             }
         }
         if(selectedCheckboxes.length == 0){
