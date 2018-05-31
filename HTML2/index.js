@@ -21,6 +21,50 @@ var ContactManager = {
         cancel : "#Cancel",
         error : "#Error-Msg"
     },
+    states : {
+        "Andhra Pradesh" : "Andhra Pradesh",
+        "Arunachal Pradesh" : "Arunachal Pradesh",
+        "Assam" : "Assam",
+        "Bihar" : "Bihar",
+        "Chhattisgarh" : "Chhattisgarh",
+        "Goa" : "Goa",
+        "Gujarat" : "Gujarat",
+        "Haryana" : "Haryana",
+        "Himachal Pradesh" : "Himachal Pradesh",
+        "Jammu & Kashmir" : "Jammu & Kashmir",
+        "Jharkhand" : "Jharkhand",
+        "Karnataka" : "Karnataka",
+        "Kerala" : "Kerala",
+        "Madhya Pradesh" : "Madhya Pradesh",
+        "Maharashtra" : "Maharashtra",
+        "Manipur" : "Manipur",
+        "Meghalaya" : "Meghalaya",
+        "Mizoram" : "Mizoram",
+        "Nagaland" : "Nagaland",
+        "Odisha" : "Odisha",
+        "Punjab" : "Punjab",
+        "Rajasthan" : "Rajasthan",
+        "Sikkim" : "Sikkim",
+        "Tamil Nadu" : "Tamil Nadu",
+        "Telangana" : "Telangana",
+        "Tripura" : "Tripura",
+        "Uttarakhand" : "Uttarakhand",
+        "Uttar Pradesh" : "Uttar Pradesh",
+        "West Bengal" : "West Bengal",
+        "Andaman and Nicobar Islands" : "Andaman and Nicobar Islands",
+        "Chandigarh" : "Chandigarh",
+        "Dadra and Nagar Haveli" : "Dadra and Nagar Haveli",
+        "Daman & Diu" : "Daman & Diu",
+        "Delhi" : "Delhi",
+        "Lakshadweep" : "Lakshadweep",
+        "Puducherry" : "Puducherry",
+    },
+    createStateOptions : function(){
+        var $state = $(ContactManager.selectors.state);
+        for (let prop in ContactManager.states) {
+            $state.append( $("<option>").val(prop).html(ContactManager.states[prop]));
+        }
+    },
     newObject : function(id, name, phoneNumber, email, dateOfBirth, address, state){
         var Contact = {
             id,
@@ -43,6 +87,7 @@ var ContactManager = {
         $contacts = $(ContactManager.selectors.contacts);
         ContactManager.setMaxDate();
         ContactManager.setMinDate();
+        ContactManager.createStateOptions();
         ContactManager.loadContacts();
         var $deleteBtn = $(ContactManager.selectors.deleteBtn);
         $deleteBtn.click(ContactManager.deleteSelected);
