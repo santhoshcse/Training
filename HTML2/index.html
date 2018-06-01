@@ -10,76 +10,88 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
-    <div id="header">
-        <h1 id="site-title"><img src="title.png" alt="title icon" height="25" width="25" style="padding-right: 10px">Contacts Manager</h1>
-    </div>
-    <div id="body">
-        <div id="create-update-form">
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><label class="required" for="name">Name</label></td>
-                            <td><input type="text" id="name" size="24" autocomplete="off"></td>
-                        </tr>
-                        <tr>
-                            <td><label class="required" for="phone">Mobile Number</label></td>
-                            <td><input type="tel" id="phone" maxlength="10" size="24" autocomplete="off"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="email">E-Mail</label></td>
-                            <td><input type="email" id="email" size="24" autocomplete="off"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="dob">DOB</label></td>
-                            <td><input type="date" id="dob"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="address">Address</label></td>
-                            <td><textarea id="address" rows="3" cols="26"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td><label for="state">State</label></td>
-                            <td>
-                                <select name="States" id="state">
-                                    <option value="Select State" style="background-color:darkgray">Select State</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>
-                                <input type="button" id="Add-Contact" class="opt-btn" value="Create">
-                                <input type="button" id="Update-Contact" class="opt-btn" value="Update">
-                            </td>
-                            <td>
-                                <input type="button" id="Reset" class="opt-btn" value="Reset">
-                                <input type="button" id="Cancel" class="opt-btn" value="Cancel">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div>
-                <p id="Error-Msg">
-                </p>
-            </div>
+    <div class="container-fluid">
+        <div id="header">
+            <h1 id="site-title" class="text-body">
+                <img src="title.png" alt="title icon" height="25" width="25" class="img-fluid">
+                Contacts Manager
+            </h1>
         </div>
-        <div id="view-point">
-            <div id="option-header">
-                <input id="Select-All" type="button" class="opt-btn" value="Select All">
-                <input id="UnSelect-All" type="button" class="opt-btn" value="Deselect All">
-                <input id="Delete" type="button" class="opt-btn" value="Delete" title="Delete Selected Rows">
-            </div>
-            <br>
-            <div id="contacts-list">
+        <div id="body" class="container-fluid">
+            <div class="row">
+                <div id="create-update-form" class="col-4">
+                    <div>
+                        <form id="validate">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><label class="required" for="name">Name</label></td>
+                                    <td><input type="text" id="name" class="form-control" size="24" autocomplete="off"></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="required" for="phone">Mobile Number</label></td>
+                                    <td><input type="tel" id="phone" class="form-control" maxlength="10" size="24" autocomplete="off"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="email">E-Mail</label></td>
+                                    <td><input type="email" id="email" class="form-control" size="24" autocomplete="off"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="dob">DOB</label></td>
+                                    <td><input type="date" id="dob" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="address">Address</label></td>
+                                    <td><textarea id="address" class="form-control" rows="3" cols="26"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="state">State</label></td>
+                                    <td>
+                                        <select name="States" id="state" class="form-control">
+                                            <option value="Select State" style="background-color:darkgray">Select State</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <input type="button" id="Add-Contact" class="opt-btn btn btn-primary" value="Create">
+                                        <input type="button" id="Update-Contact" class="opt-btn btn btn-primary" value="Update">
+                                    </td>
+                                    <td>
+                                        <input type="button" id="Reset" class="opt-btn btn btn-info" value="Reset">
+                                        <input type="button" id="Cancel" class="opt-btn btn btn-info" value="Cancel">
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        </form>
+                    </div>
+                    <br>
+                    <div id="Notification">
+                        <button type="button" class="close">&times;</button>
+                        <p id="Msg"></p>
+                    </div>
+                </div>
+                <div id="view-point" class="col-8">
+                    <div id="option-header">
+                        <input id="toggle-form" type="button" class="opt-btn btn btn-info" value="Show/Hide Form">
+                        <input id="Select-All" type="button" class="opt-btn btn btn-info" value="Select All">
+                        <input id="UnSelect-All" type="button" class="opt-btn btn btn-info" value="Deselect All">
+                        <input id="Delete" type="button" class="opt-btn btn btn-danger" value="Delete" title="Delete Selected Rows">
+                    </div>
+                    <br>
+                    <div id="contacts-list" class="table-responsive-xl">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

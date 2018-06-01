@@ -19,7 +19,11 @@ var ContactManager = {
         state : "#state",
         update_Contact : "#Update-Contact",
         cancel : "#Cancel",
-        error : "#Error-Msg"
+        error : "#Notification",
+        error_msg : "#Msg",
+        toggle : "#toggle-form",
+        form : "#create-update-form",
+        view : "#view-point"
     },
     states : {
         "Andhra Pradesh" : "Andhra Pradesh",
@@ -103,6 +107,17 @@ var ContactManager = {
         $add_Contact.click(ContactManager.addContact);
         var $reset = $(ContactManager.selectors.reset);
         $reset.click(ContactManager.resetForm);
+        $toggle = $(ContactManager.selectors.toggle);
+        $toggle.click(function(){
+            $(ContactManager.selectors.form).toggle();
+            $view = $(ContactManager.selectors.view);
+            if($view.attr("class") == "col-8"){
+                $view.attr("class", "col-12");
+            }
+            else{
+                $view.attr("class", "col-8");
+            }
+        });
     },
     setMinDate : function(){
         var minDate = new Date();
@@ -135,7 +150,7 @@ var ContactManager = {
     },
     loadContacts : function(){
         if(ContactManager.contactList.length > 0){
-            var tableContent = "<table id=\"list\" border=\"1\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
             var tempData = "";
             var chkboc_value = 0;
             ContactManager.contactList.forEach(function(contact) {
@@ -151,7 +166,9 @@ var ContactManager = {
             $contacts.html(tableContent);
         }
         else{
-            $contacts.text("Empty");
+            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
+            $contacts.html(tableContent);
+            // $contacts.html("Table is Empty!<br>Add New Contact...");
         }
     },
     deleteUpdateUtil : function(clickedImg){
@@ -167,21 +184,31 @@ var ContactManager = {
             }
         }
         else if(cmd[1] == "update"){
+            $(ContactManager.selectors.form).show();
             ContactManager.toUpdate();
             ContactManager.deleteFlag = false;
-            ContactManager.clickable("none");
+            ContactManager.clickable("none", "disabled", "active", "add");
         }
     },
-    clickable : function(pointerEvent){
+    clickable : function(pointerEvent, add, remove, attr){
         var $dIcon = $(ContactManager.selectors.dIcon);
         $dIcon.css("pointerEvents", pointerEvent);
         var $del = $(ContactManager.selectors.deleteBtn);
-        $del.css("pointerEvents", pointerEvent);
+        $del.addClass(add);
+        $del.removeClass(remove);
+        if(attr == "add"){
+            $del.attr("disabled", "disabled");
+        }
+        else{
+            $del.removeAttr("disabled", "disabled");
+        }
+        // $del.css("pointerEvents", pointerEvent);
     },
     deleteContact : function(){
         if(confirm("Confirm Delete ?")){
             ContactManager.contactList.splice(ContactManager.currentRecord, 1);
             ContactManager.loadContacts();
+            ContactManager.showNotification("Contact Deleted..!");
         }
     },
     toUpdate : function(){
@@ -229,16 +256,22 @@ var ContactManager = {
         var $cancel = $(ContactManager.selectors.cancel);
         $cancel.hide();
         ContactManager.resetForm();
-        ContactManager.clickable("auto");
+        ContactManager.clickable("auto", "active", "disabled", "remove");
     },
     showNotification : function(message){
         var $error = $(ContactManager.selectors.error);
-        $error.html(message);
+        var $error_msg = $(ContactManager.selectors.error_msg);
+        $error_msg.html(message);
         $error.show();
+        $error.addClass("alert alert-success alert-dismissible");
         setTimeout(function() {
-            $error.empty();
             $error.hide();
+            $error.removeClass("alert alert-danger alert-dismissible");
         }, 5000);
+        $(".close").click(function(){
+            $error.hide();
+            $error.removeClass("alert alert-danger alert-dismissible");
+        });
     },
     updateContact : function(){
         var _name = $(ContactManager.selectors.name).val();
@@ -259,6 +292,11 @@ var ContactManager = {
         else{
             var $error = $(ContactManager.selectors.error);
             $error.show();
+            $error.addClass("alert alert-danger alert-dismissible");
+            $(".close").click(function(){
+                $error.hide();
+                $error.removeClass("alert alert-danger alert-dismissible");
+            });
         }
     },
     addContact : function(){
@@ -284,34 +322,45 @@ var ContactManager = {
             ContactManager.loadContacts();
         }
         else{
-            var $error = $("#Error-Msg");
+            var $error = $(ContactManager.selectors.error);
             $error.show();
+            $error.addClass("alert alert-danger alert-dismissible");
+            $(".close").click(function(){
+                $error.hide();
+                $error.removeClass("alert alert-danger alert-dismissible");
+            });
         }
     },
     validateInput : function(_name, _phone, _email, _dob){
-        var $error = $(ContactManager.selectors.error);
+        var $error_msg = $(ContactManager.selectors.error_msg);
         if(_name.length == 0){
-            $error.html("Name is Empty");
+            $error_msg.html("Name is Empty");
+            $(ContactManager.selectors.name).focus();
             return false;
         }
         else if(_phone.length == 0){
-            $error.html("Phone Number is Empty");
+            $error_msg.html("Phone Number is Empty");
+            $(ContactManager.selectors.phone).focus();
             return false;
         }
         else if(!ContactManager.isPhoneNumber(_phone)){
-            $error.html("Phone Number should have only digits");
+            $error_msg.html("Phone Number should have only digits");
+            $(ContactManager.selectors.phone).focus();
             return false;
         }
         else if(_phone.length < 10){
-            $error.html("Phone Number should be 10 digit");
+            $error_msg.html("Phone Number should be 10 digit");
+            $(ContactManager.selectors.phone).focus();
             return false;
         } 
         else if(_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))){
-            $error.html("InValid Email ID");
+            $error_msg.html("InValid Email ID");
+            $(ContactManager.selectors.email).focus();
             return false;
         }
         else if(_dob != "" && !ContactManager.checkDOB(_dob)){
-            $error.html("DOB is Invalid");
+            $error_msg.html("DOB is Invalid");
+            $(ContactManager.selectors.dob).focus();
             return false;
         }
         return true;
@@ -344,10 +393,13 @@ var ContactManager = {
         $(ContactManager.selectors.address).val("");
         var $stateOp = $(ContactManager.selectors.state);
         $stateOp.prop('selectedIndex', 0);
+        // $error = $(ContactManager.selectors.error);
+        // $error.hide();
+        // $error.removeClass("alert alert-danger alert-dismissible");
     },
     deleteSelected : function(){
         if(ContactManager.deleteFlag){
-            var $checkboxes = $("[name=select-contact]");
+            var $checkboxes = $(ContactManager.selectors.checkboxes);
             var selectedCheckboxes = [];
             for (let index = 0; index < $checkboxes.length; index++) {
                 var $element = $checkboxes[index];
@@ -371,6 +423,7 @@ var ContactManager = {
                     });
                     ContactManager.contactList = tempContacts;
                     ContactManager.loadContacts();
+                    ContactManager.showNotification("Contact's Deleted..!");
                 }
             }
         }
