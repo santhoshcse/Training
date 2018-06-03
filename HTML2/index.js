@@ -118,7 +118,36 @@ var ContactManager = {
                 $view.attr("class", "col-8");
             }
         });
+        $("#search").click(function(){
+            alert($("#search-data").val());
+            // ContactManager.search($("#search-data").val());
+        });
     },
+    /*search : function(searchData){
+        if(ContactManager.contactList.length > 0){
+            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+            var tempData = "";
+            var chkboc_value = 0;
+            ContactManager.contactList.forEach(function(contact) {
+                // if(contact.name.contain ){
+                    var tempState = contact.state;
+                    if(tempState == "Select State"){
+                        tempState = "";
+                    }
+                    tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+                // }
+                chkboc_value ++;
+            });
+            tableContent += tempData;
+            tableContent += "</tbody></table>";
+            $contacts.html(tableContent);
+        }
+        else{
+            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
+            $contacts.html(tableContent);
+            // $contacts.html("Table is Empty!<br>Add New Contact...");
+        }
+    },*/
     setMinDate : function(){
         var minDate = new Date();
         var yyyy = minDate.getFullYear() - 100;
@@ -152,18 +181,17 @@ var ContactManager = {
         if(ContactManager.contactList.length > 0){
             var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
             var tempData = "";
-            var chkboc_value = 0;
             ContactManager.contactList.forEach(function(contact) {
                 var tempState = contact.state;
                 if(tempState == "Select State"){
                     tempState = "";
                 }
-                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + chkboc_value + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + chkboc_value + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
-                chkboc_value ++;
+                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + contact.id + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
             });
             tableContent += tempData;
             tableContent += "</tbody></table>";
             $contacts.html(tableContent);
+            console.log(ContactManager.contactList);
         }
         else{
             tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
@@ -173,7 +201,15 @@ var ContactManager = {
     },
     deleteUpdateUtil : function(clickedImg){
         var rowNumber = parseInt(clickedImg);
-        ContactManager.currentRecord = rowNumber;
+        var selectedRecord;
+        for(selectedRecord = 0; selectedRecord < ContactManager.contactList.length; selectedRecord++){
+            var contact = ContactManager.contactList[selectedRecord];
+            if(contact.id == rowNumber){
+                break;
+            }
+        }
+        ContactManager.currentRecord = selectedRecord;
+        console.log(ContactManager.currentRecord);
         var cmd = clickedImg.split('-');
         if(cmd[1] == "delete"){
             if(ContactManager.deleteFlag){
@@ -413,13 +449,11 @@ var ContactManager = {
             else{
                 if(confirm("Confirm Delete ?")){
                     var tempContacts = [];
-                    var it = 0;
                     console.log(selectedCheckboxes);
                     ContactManager.contactList.forEach(function(contact) {
-                        if(!selectedCheckboxes.includes(it)){
+                        if(!selectedCheckboxes.includes(contact.id)){
                             tempContacts.push(contact);
                         }
-                        it ++;
                     });
                     ContactManager.contactList = tempContacts;
                     ContactManager.loadContacts();
