@@ -85,69 +85,11 @@ var Contact = /** @class */ (function () {
 var ContactManager = /** @class */ (function () {
     function ContactManager() {
     }
-    ContactManager.setMaxDate = function () {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
-        var _dd, _mm;
-        if (dd < 10) {
-            _dd = '0' + dd;
-        }
-        if (mm < 10) {
-            _mm = '0' + mm;
-        }
-        var _today = yyyy + '-' + mm + '-' + dd;
-        // $(ContactManager.selectors.dob).attr("max", _today);
-    };
-    ContactManager.setMinDate = function () {
-        var minDate = new Date();
-        var yyyy = minDate.getFullYear() - 100;
-        var dd = "01";
-        var mm = "01";
-        var _minDate = yyyy + "-" + mm + "-" + dd;
-        // $(ContactManager.selectors.dob).attr("min", _minDate);
-    };
     ContactManager.createStateOptions = function () {
         var state = document.getElementById(ContactManager.selectors.state);
         for (var prop in ContactManager.states) {
             // state.append( $("<option>").val(prop).html(ContactManager.states[prop]));
         }
-    };
-    ContactManager.loadContacts = function () {
-        var contacts = document.getElementById(ContactManager.selectors.contacts);
-        if (ContactManager.contactList.length > 0) {
-            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
-            var tempData = "";
-            ContactManager.contactList.forEach(function (contact) {
-                var tempState = contact.state;
-                if (tempState == "Select State") {
-                    tempState = "";
-                }
-                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + contact.id + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
-            });
-            tableContent += tempData;
-            tableContent += "</tbody></table>";
-            contacts.innerHTML = tableContent;
-            console.log(ContactManager.contactList);
-        }
-        else {
-            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
-            contacts.innerHTML = tableContent;
-        }
-    };
-    ContactManager.selectDeselect = function (status) {
-        var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
-        for (var index = 0; index < checkboxes.length; index++) {
-            var element = checkboxes[index];
-            // element.checked = status;
-        }
-    };
-    ContactManager.deleteSelected = function () {
-    };
-    ContactManager.addContact = function () {
-    };
-    ContactManager.resetForm = function () {
     };
     ContactManager.init = function () {
         // sample records
@@ -167,8 +109,8 @@ var ContactManager = /** @class */ (function () {
         selectAll.onclick = function () {
             ContactManager.selectDeselect(true);
         };
-        var $unSelectAll = document.getElementById(ContactManager.selectors.unSelectAll);
-        $unSelectAll.onclick = function () {
+        var unSelectAll = document.getElementById(ContactManager.selectors.unSelectAll);
+        unSelectAll.onclick = function () {
             ContactManager.selectDeselect(false);
         };
         var add_Contact = document.getElementById(ContactManager.selectors.add_Contact);
@@ -177,15 +119,344 @@ var ContactManager = /** @class */ (function () {
         reset.onclick = ContactManager.resetForm;
         var toggle = document.getElementById(ContactManager.selectors.toggle);
         toggle.onclick = function () {
-            // $(ContactManager.selectors.form).toggle();
+            var form = document.getElementById(ContactManager.selectors.form);
+            if (form.style.display == "" || form.style.display == "block") {
+                form.style.display = "none";
+            }
+            else {
+                form.style.display = "block";
+            }
             var view = document.getElementById(ContactManager.selectors.view);
-            // if($view.attr("class") == "col-8"){
-            // $view.attr("class", "col-12");
+            // if(view.attr("class") == "col-8"){
+            // view.attr("class", "col-12");
             // }
             // else{
-            // $view.attr("class", "col-8");
+            // view.attr("class", "col-8");
             // }
         };
+    };
+    ContactManager.setMinDate = function () {
+        var minDate = new Date();
+        var yyyy = minDate.getFullYear() - 100;
+        var dd = "01";
+        var mm = "01";
+        var _minDate = yyyy + "-" + mm + "-" + dd;
+        // $(ContactManager.selectors.dob).attr("min", _minDate);
+    };
+    ContactManager.setMaxDate = function () {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        var _dd, _mm;
+        if (dd < 10) {
+            _dd = '0' + dd;
+        }
+        if (mm < 10) {
+            _mm = '0' + mm;
+        }
+        var _today = yyyy + '-' + mm + '-' + dd;
+        // $(ContactManager.selectors.dob).attr("max", _today);
+    };
+    ContactManager.selectDeselect = function (status) {
+        var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
+        for (var index = 0; index < checkboxes.length; index++) {
+            var element = checkboxes[index];
+            element.checked = status;
+        }
+    };
+    ContactManager.loadContacts = function () {
+        var contacts = document.getElementById(ContactManager.selectors.contacts);
+        if (ContactManager.contactList.length > 0) {
+            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+            var tempData = "";
+            ContactManager.contactList.forEach(function (contact) {
+                var tempState = contact.state;
+                if (tempState == "Select State") {
+                    tempState = "";
+                }
+                tempData += "<tr>" + "<td><input type=\"checkbox\" name=\"select-contact\" value=\"" + contact.id + "\" ></td>" + "<td>" + contact.name + "</td>" + "<td>" + contact.phoneNumber + "</td>" + "<td>" + contact.email + "</td>" + "<td>" + contact.dateOfBirth + "</td>" + "<td>" + contact.address + "</td>" + "<td>" + tempState + "</td>" + "<td><img src=\"delete.png\" alt=\"delete contact\" height=\"25\" width=\"25\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-delete\" class=\"delete-icon\" title=\"delete contact\" ><img src=\"edit.svg\" alt=\"Update contact\" height=\"25\" width=\"25\" style=\"margin-left:10px;\" onclick=\"ContactManager.deleteUpdateUtil(this.id)\" id=\"" + contact.id + "-update\" class=\"update-icon\" title=\"edit contact\" ></td>" + "</tr>";
+            });
+            tableContent += tempData;
+            tableContent += "</tbody></table>";
+            contacts.innerHTML = tableContent;
+            // console.log(ContactManager.contactList);
+        }
+        else {
+            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
+            contacts.innerHTML = tableContent;
+        }
+    };
+    ContactManager.deleteUpdateUtil = function (clickedImg) {
+        var rowNumber = parseInt(clickedImg);
+        var selectedRecord;
+        for (selectedRecord = 0; selectedRecord < ContactManager.contactList.length; selectedRecord++) {
+            var contact = ContactManager.contactList[selectedRecord];
+            if (contact.id == rowNumber) {
+                break;
+            }
+        }
+        ContactManager.currentRecord = selectedRecord;
+        console.log(ContactManager.currentRecord);
+        var cmd = clickedImg.split('-');
+        if (cmd[1] == "delete") {
+            if (ContactManager.deleteFlag) {
+                ContactManager.deleteContact();
+            }
+            else {
+                alert("Can't delete while updating");
+            }
+        }
+        else if (cmd[1] == "update") {
+            document.getElementById(ContactManager.selectors.form).style.display = "block";
+            ContactManager.toUpdate();
+            ContactManager.deleteFlag = false;
+            ContactManager.clickable("none", "disabled", "active", "add");
+        }
+    };
+    ContactManager.clickable = function (pointerEvent, add, remove, attr) {
+        var dIcon = document.getElementsByClassName(ContactManager.selectors.dIcon);
+        // dIcon.css("pointerEvents", pointerEvent);
+        var del = document.getElementById(ContactManager.selectors.deleteBtn);
+        // del.addClass(add);
+        // del.removeClass(remove);
+        if (attr == "add") {
+            // del.attr("disabled", "disabled");
+        }
+        else {
+            // del.removeAttr("disabled", "disabled");
+        }
+        // del.css("pointerEvents", pointerEvent);
+    };
+    ContactManager.deleteContact = function () {
+        if (confirm("Confirm Delete ?")) {
+            ContactManager.contactList.splice(ContactManager.currentRecord, 1);
+            ContactManager.loadContacts();
+            ContactManager.showNotification("Contact Deleted..!");
+        }
+    };
+    ContactManager.toUpdate = function () {
+        var jsonContacts = ContactManager.contactList;
+        var _name = document.getElementById(ContactManager.selectors.name);
+        _name.value = jsonContacts[ContactManager.currentRecord].name;
+        var _phone = document.getElementById(ContactManager.selectors.phone);
+        _phone.value = jsonContacts[ContactManager.currentRecord].phoneNumber;
+        var _email = document.getElementById(ContactManager.selectors.email);
+        _email.value = jsonContacts[ContactManager.currentRecord].email;
+        var _dob = document.getElementById(ContactManager.selectors.dob);
+        _dob.value = jsonContacts[ContactManager.currentRecord].dateOfBirth;
+        var _address = document.getElementById(ContactManager.selectors.address);
+        _address.value = jsonContacts[ContactManager.currentRecord].address;
+        var stateOp = document.getElementById(ContactManager.selectors.state);
+        if (jsonContacts[ContactManager.currentRecord].state == "Select State") {
+            stateOp.selectedIndex = 0;
+        }
+        else {
+            stateOp.value = jsonContacts[ContactManager.currentRecord].state;
+        }
+        var add_Contact = document.getElementById(ContactManager.selectors.add_Contact);
+        add_Contact.style.display = "none";
+        var update_Contact = document.getElementById(ContactManager.selectors.update_Contact);
+        update_Contact.style.display = "block";
+        var reset = document.getElementById(ContactManager.selectors.reset);
+        reset.style.display = "none";
+        var cancel = document.getElementById(ContactManager.selectors.cancel);
+        cancel.style.display = "block";
+        cancel.onclick = ContactManager.cancelUpdate;
+        update_Contact.onclick = ContactManager.updateContact;
+    };
+    ContactManager.cancelUpdate = function () {
+        ContactManager.deleteFlag = true;
+        var add_Contact = document.getElementById(ContactManager.selectors.add_Contact);
+        add_Contact.style.display = "block";
+        var update_Contact = document.getElementById(ContactManager.selectors.update_Contact);
+        update_Contact.style.display = "none";
+        var reset = document.getElementById(ContactManager.selectors.reset);
+        reset.style.display = "block";
+        var cancel = document.getElementById(ContactManager.selectors.cancel);
+        cancel.style.display = "none";
+        ContactManager.resetForm();
+        ContactManager.clickable("auto", "active", "disabled", "remove");
+    };
+    ContactManager.showNotification = function (message) {
+        var error = document.getElementById(ContactManager.selectors.error);
+        var error_msg = document.getElementById(ContactManager.selectors.error_msg);
+        error_msg.innerHTML = message;
+        error.style.display = "block";
+        // error.addClass("alert alert-success alert-dismissible");
+        setTimeout(function () {
+            error.style.display = "none";
+            // error.removeClass("alert alert-danger alert-dismissible");
+        }, 5000);
+        var close = document.getElementsByClassName(ContactManager.selectors.close);
+        for (var index = 0; index < close.length; index++) {
+            var element = close[index];
+            element.onclick = function () {
+                error.style.display = "none";
+                // error.removeClass("alert alert-danger alert-dismissible");
+            };
+        }
+    };
+    ContactManager.updateContact = function () {
+        var _name = document.getElementById(ContactManager.selectors.name).value;
+        var _phone = (ContactManager.selectors.phone).value;
+        var _email = (ContactManager.selectors.email).value;
+        var _dob = (ContactManager.selectors.dob).value;
+        var isValid = ContactManager.validateInput(_name, _phone, _email, _dob);
+        if (isValid) {
+            var _address = (ContactManager.selectors.address).value;
+            var _state = (ContactManager.selectors.state).value;
+            var newId = ContactManager.contactList[ContactManager.currentRecord].id;
+            var newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
+            ContactManager.contactList.splice(ContactManager.currentRecord, 1, newContact);
+            ContactManager.showNotification("Contact Updated");
+            ContactManager.cancelUpdate();
+            ContactManager.loadContacts();
+        }
+        else {
+            var error = document.getElementById(ContactManager.selectors.error);
+            error.style.display = "block";
+            // error.addClass("alert alert-danger alert-dismissible");
+            var close = document.getElementsByClassName(ContactManager.selectors.close);
+            for (var index = 0; index < close.length; index++) {
+                var element = close[index];
+                element.onclick = function () {
+                    error.style.display = "none";
+                    // error.removeClass("alert alert-danger alert-dismissible");
+                };
+            }
+        }
+    };
+    ContactManager.addContact = function () {
+        var _name = document.getElementById(ContactManager.selectors.name).value;
+        var _phone = document.getElementById(ContactManager.selectors.phone).value;
+        var _email = document.getElementById(ContactManager.selectors.email).value;
+        var _dob = document.getElementById(ContactManager.selectors.dob).value;
+        var isValid = ContactManager.validateInput(_name, _phone, _email, _dob);
+        if (isValid) {
+            var _address = document.getElementById(ContactManager.selectors.address).value;
+            var _state = document.getElementById(ContactManager.selectors.state).value;
+            var newContact = null;
+            if (ContactManager.contactList.length == 0) {
+                newContact = new Contact(1, _name, _phone, _email, _dob, _address, _state);
+            }
+            else {
+                var newId = ContactManager.contactList[ContactManager.contactList.length - 1].id + 1;
+                newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
+            }
+            ContactManager.contactList.push(newContact);
+            ContactManager.showNotification("Contact Added");
+            ContactManager.resetForm();
+            ContactManager.loadContacts();
+        }
+        else {
+            var error = document.getElementById(ContactManager.selectors.error);
+            error.style.display = "block";
+            // error.addClass("alert alert-danger alert-dismissible");
+            var close = document.getElementsByClassName(ContactManager.selectors.close);
+            for (var index = 0; index < close.length; index++) {
+                var element = close[index];
+                element.onclick = function () {
+                    error.style.display = "none";
+                    // error.removeClass("alert alert-danger alert-dismissible");
+                };
+            }
+        }
+    };
+    ContactManager.validateInput = function (_name, _phone, _email, _dob) {
+        var error_msg = document.getElementById(ContactManager.selectors.error_msg);
+        if (_name.length == 0) {
+            error_msg.innerHTML = "Name is Empty";
+            document.getElementById(ContactManager.selectors.name).focus();
+            return false;
+        }
+        else if (_phone.length == 0) {
+            error_msg.innerHTML = "Phone Number is Empty";
+            document.getElementById(ContactManager.selectors.phone).focus();
+            return false;
+        }
+        else if (!ContactManager.isPhoneNumber(_phone)) {
+            error_msg.innerHTML = "Phone Number should have only digits";
+            document.getElementById(ContactManager.selectors.phone).focus();
+            return false;
+        }
+        else if (_phone.length < 10) {
+            error_msg.innerHTML = "Phone Number should be 10 digit";
+            document.getElementById(ContactManager.selectors.phone).focus();
+            return false;
+        }
+        else if (_email != "" && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(_email))) {
+            error_msg.innerHTML = "InValid Email ID";
+            document.getElementById(ContactManager.selectors.email).focus();
+            return false;
+        }
+        else if (_dob != "" && !ContactManager.checkDOB(_dob)) {
+            error_msg.innerHTML = "DOB is Invalid";
+            document.getElementById(ContactManager.selectors.dob).focus();
+            return false;
+        }
+        return true;
+    };
+    ContactManager.checkDOB = function (_dob) {
+        var newDate = new Date(_dob);
+        var date = new Date();
+        var minYear = date.getFullYear() - 100;
+        var minDate = new Date(minYear + "-01-01");
+        if (!(newDate <= date && newDate >= minDate)) {
+            return false;
+        }
+        return true;
+    };
+    ContactManager.isPhoneNumber = function (_phone) {
+        var flag = true;
+        for (var index = 0; index < _phone.length; index++) {
+            if ((_phone[index] >= 'A' && _phone[index] <= 'Z') || (_phone[index] >= 'a' && _phone[index] <= 'z')) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    };
+    ContactManager.resetForm = function () {
+        document.getElementById(ContactManager.selectors.name).value = "";
+        document.getElementById(ContactManager.selectors.phone).value = "";
+        document.getElementById(ContactManager.selectors.email).value = "";
+        document.getElementById(ContactManager.selectors.dob).value = "";
+        document.getElementById(ContactManager.selectors.address).value = "";
+        var stateOp = document.getElementById(ContactManager.selectors.state);
+        stateOp.selectedIndex = 0;
+    };
+    ContactManager.deleteSelected = function () {
+        if (ContactManager.deleteFlag) {
+            var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
+            var selectedCheckboxes = []; //
+            for (var index = 0; index < checkboxes.length; index++) {
+                var element = checkboxes[index];
+                if (element.checked) {
+                    selectedCheckboxes.push(parseInt(element.value));
+                }
+            }
+            if (selectedCheckboxes.length == 0) {
+                alert("Select any one record to proceed..!");
+            }
+            else {
+                if (confirm("Confirm Delete ?")) {
+                    var tempContacts = [];
+                    console.log(selectedCheckboxes);
+                    ContactManager.contactList.forEach(function (contact) {
+                        // if(!selectedCheckboxes.includes(contact.id)){
+                        tempContacts.push(contact);
+                        // }
+                    });
+                    ContactManager.contactList = tempContacts;
+                    ContactManager.loadContacts();
+                    ContactManager.showNotification("Contact's Deleted..!");
+                }
+            }
+        }
+        else {
+            alert("Can't delete while updating");
+        }
     };
     ContactManager.contactList = [];
     ContactManager.deleteFlag = true;
@@ -197,7 +468,7 @@ var ContactManager = /** @class */ (function () {
         unSelectAll: "UnSelect-All",
         add_Contact: "Add-Contact",
         reset: "Reset",
-        checkboxes: "[name=select-contact]",
+        checkboxes: "select-contact",
         dob: "dob",
         dIcon: "delete-icon",
         name: "name",
@@ -211,7 +482,8 @@ var ContactManager = /** @class */ (function () {
         error_msg: "Msg",
         toggle: "toggle-form",
         form: "create-update-form",
-        view: "view-point"
+        view: "view-point",
+        close: "close"
     };
     ContactManager.states = {
         "Andhra Pradesh": "Andhra Pradesh",
