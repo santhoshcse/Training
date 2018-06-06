@@ -87,9 +87,11 @@ var ContactManager = /** @class */ (function () {
     }
     ContactManager.createStateOptions = function () {
         var state = document.getElementById(ContactManager.selectors.state);
+        var options = "";
         for (var prop in ContactManager.states) {
-            // state.append( $("<option>").val(prop).html(ContactManager.states[prop]));
+            options += "<option value=\"" + prop + "\">" + ContactManager.states[prop] + "</option>";
         }
+        state.innerHTML += options;
     };
     ContactManager.init = function () {
         // sample records
@@ -127,12 +129,12 @@ var ContactManager = /** @class */ (function () {
                 form.style.display = "block";
             }
             var view = document.getElementById(ContactManager.selectors.view);
-            // if(view.attr("class") == "col-8"){
-            // view.attr("class", "col-12");
-            // }
-            // else{
-            // view.attr("class", "col-8");
-            // }
+            if (view.getAttribute("class") == "col-8") {
+                view.setAttribute("class", "col-12");
+            }
+            else {
+                view.setAttribute("class", "col-8");
+            }
         };
     };
     ContactManager.setMinDate = function () {
@@ -141,7 +143,7 @@ var ContactManager = /** @class */ (function () {
         var dd = "01";
         var mm = "01";
         var _minDate = yyyy + "-" + mm + "-" + dd;
-        // $(ContactManager.selectors.dob).attr("min", _minDate);
+        document.getElementById(ContactManager.selectors.dob).setAttribute("min", _minDate);
     };
     ContactManager.setMaxDate = function () {
         var today = new Date();
@@ -155,8 +157,8 @@ var ContactManager = /** @class */ (function () {
         if (mm < 10) {
             _mm = '0' + mm;
         }
-        var _today = yyyy + '-' + mm + '-' + dd;
-        // $(ContactManager.selectors.dob).attr("max", _today);
+        var _today = yyyy + '-' + _mm + '-' + _dd;
+        document.getElementById(ContactManager.selectors.dob).setAttribute("max", _today);
     };
     ContactManager.selectDeselect = function (status) {
         var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
@@ -167,8 +169,9 @@ var ContactManager = /** @class */ (function () {
     };
     ContactManager.loadContacts = function () {
         var contacts = document.getElementById(ContactManager.selectors.contacts);
+        var tableContent = "";
         if (ContactManager.contactList.length > 0) {
-            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
             var tempData = "";
             ContactManager.contactList.forEach(function (contact) {
                 var tempState = contact.state;
@@ -179,13 +182,11 @@ var ContactManager = /** @class */ (function () {
             });
             tableContent += tempData;
             tableContent += "</tbody></table>";
-            contacts.innerHTML = tableContent;
-            // console.log(ContactManager.contactList);
         }
         else {
             tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
-            contacts.innerHTML = tableContent;
         }
+        contacts.innerHTML = tableContent;
     };
     ContactManager.deleteUpdateUtil = function (clickedImg) {
         var rowNumber = parseInt(clickedImg);
@@ -211,22 +212,22 @@ var ContactManager = /** @class */ (function () {
             document.getElementById(ContactManager.selectors.form).style.display = "block";
             ContactManager.toUpdate();
             ContactManager.deleteFlag = false;
-            ContactManager.clickable("none", "disabled", "active", "add");
+            ContactManager.clickable("none", "add");
         }
     };
-    ContactManager.clickable = function (pointerEvent, add, remove, attr) {
+    ContactManager.clickable = function (pointerEvent, attr) {
         var dIcon = document.getElementsByClassName(ContactManager.selectors.dIcon);
-        // dIcon.css("pointerEvents", pointerEvent);
+        for (var index = 0; index < dIcon.length; index++) {
+            var element = dIcon[index];
+            element.style.pointerEvents = pointerEvent;
+        }
         var del = document.getElementById(ContactManager.selectors.deleteBtn);
-        // del.addClass(add);
-        // del.removeClass(remove);
         if (attr == "add") {
-            // del.attr("disabled", "disabled");
+            del.setAttribute("disabled", "disabled");
         }
         else {
-            // del.removeAttr("disabled", "disabled");
+            del.removeAttribute("disabled"); //
         }
-        // del.css("pointerEvents", pointerEvent);
     };
     ContactManager.deleteContact = function () {
         if (confirm("Confirm Delete ?")) {
@@ -276,36 +277,36 @@ var ContactManager = /** @class */ (function () {
         var cancel = document.getElementById(ContactManager.selectors.cancel);
         cancel.style.display = "none";
         ContactManager.resetForm();
-        ContactManager.clickable("auto", "active", "disabled", "remove");
+        ContactManager.clickable("auto", "remove");
     };
     ContactManager.showNotification = function (message) {
         var error = document.getElementById(ContactManager.selectors.error);
         var error_msg = document.getElementById(ContactManager.selectors.error_msg);
         error_msg.innerHTML = message;
         error.style.display = "block";
-        // error.addClass("alert alert-success alert-dismissible");
+        error.className += " alert alert-success alert-dismissible";
         setTimeout(function () {
             error.style.display = "none";
-            // error.removeClass("alert alert-danger alert-dismissible");
+            error.classList.remove("alert alert-success alert-dismissible");
         }, 5000);
         var close = document.getElementsByClassName(ContactManager.selectors.close);
         for (var index = 0; index < close.length; index++) {
             var element = close[index];
             element.onclick = function () {
                 error.style.display = "none";
-                // error.removeClass("alert alert-danger alert-dismissible");
+                error.classList.remove("alert alert-success alert-dismissible");
             };
         }
     };
     ContactManager.updateContact = function () {
         var _name = document.getElementById(ContactManager.selectors.name).value;
-        var _phone = (ContactManager.selectors.phone).value;
-        var _email = (ContactManager.selectors.email).value;
-        var _dob = (ContactManager.selectors.dob).value;
+        var _phone = document.getElementById(ContactManager.selectors.phone).value;
+        var _email = document.getElementById(ContactManager.selectors.email).value;
+        var _dob = document.getElementById(ContactManager.selectors.dob).value;
         var isValid = ContactManager.validateInput(_name, _phone, _email, _dob);
         if (isValid) {
-            var _address = (ContactManager.selectors.address).value;
-            var _state = (ContactManager.selectors.state).value;
+            var _address = document.getElementById(ContactManager.selectors.address).value;
+            var _state = document.getElementById(ContactManager.selectors.state).value;
             var newId = ContactManager.contactList[ContactManager.currentRecord].id;
             var newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
             ContactManager.contactList.splice(ContactManager.currentRecord, 1, newContact);
@@ -316,13 +317,13 @@ var ContactManager = /** @class */ (function () {
         else {
             var error = document.getElementById(ContactManager.selectors.error);
             error.style.display = "block";
-            // error.addClass("alert alert-danger alert-dismissible");
+            error.className += " alert alert-danger alert-dismissible";
             var close = document.getElementsByClassName(ContactManager.selectors.close);
             for (var index = 0; index < close.length; index++) {
                 var element = close[index];
                 element.onclick = function () {
                     error.style.display = "none";
-                    // error.removeClass("alert alert-danger alert-dismissible");
+                    error.classList.remove("alert alert-danger alert-dismissible");
                 };
             }
         }
@@ -352,13 +353,13 @@ var ContactManager = /** @class */ (function () {
         else {
             var error = document.getElementById(ContactManager.selectors.error);
             error.style.display = "block";
-            // error.addClass("alert alert-danger alert-dismissible");
+            error.className += " alert alert-danger alert-dismissible";
             var close = document.getElementsByClassName(ContactManager.selectors.close);
             for (var index = 0; index < close.length; index++) {
                 var element = close[index];
                 element.onclick = function () {
                     error.style.display = "none";
-                    // error.removeClass("alert alert-danger alert-dismissible");
+                    error.classList.remove("alert alert-danger alert-dismissible");
                 };
             }
         }
@@ -429,7 +430,7 @@ var ContactManager = /** @class */ (function () {
     ContactManager.deleteSelected = function () {
         if (ContactManager.deleteFlag) {
             var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
-            var selectedCheckboxes = []; //
+            var selectedCheckboxes = [];
             for (var index = 0; index < checkboxes.length; index++) {
                 var element = checkboxes[index];
                 if (element.checked) {
@@ -444,9 +445,9 @@ var ContactManager = /** @class */ (function () {
                     var tempContacts = [];
                     console.log(selectedCheckboxes);
                     ContactManager.contactList.forEach(function (contact) {
-                        // if(!selectedCheckboxes.includes(contact.id)){
-                        tempContacts.push(contact);
-                        // }
+                        if (selectedCheckboxes.indexOf(contact.id) == -1) {
+                            tempContacts.push(contact);
+                        }
                     });
                     ContactManager.contactList = tempContacts;
                     ContactManager.loadContacts();

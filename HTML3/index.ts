@@ -128,9 +128,11 @@ class ContactManager {
     };
     private static createStateOptions() : void {
         var state = document.getElementById(ContactManager.selectors.state);
+        var options = "";
         for (let prop in ContactManager.states) {
-            // state.append( $("<option>").val(prop).html(ContactManager.states[prop]));
+            options += "<option value=\"" + prop + "\">" + ContactManager.states[prop] + "</option>";
         }
+        state.innerHTML += options;
     }
     static init() : void {
         // sample records
@@ -168,12 +170,12 @@ class ContactManager {
                 form.style.display = "block";
             }
             var view = document.getElementById(ContactManager.selectors.view);
-            // if(view.attr("class") == "col-8"){
-                // view.attr("class", "col-12");
-            // }
-            // else{
-                // view.attr("class", "col-8");
-            // }
+            if(view.getAttribute("class") == "col-8"){
+                view.setAttribute("class", "col-12");
+            }
+            else{
+                view.setAttribute("class", "col-8");
+            }
         };
     }
     private static setMinDate() : void {
@@ -182,7 +184,7 @@ class ContactManager {
         var dd = "01";
         var mm = "01";
         var _minDate = yyyy + "-" + mm + "-" + dd;
-        // $(ContactManager.selectors.dob).attr("min", _minDate);
+        document.getElementById(ContactManager.selectors.dob).setAttribute("min", _minDate);
     }
     private static setMaxDate() : void {
         var today = new Date();
@@ -196,8 +198,8 @@ class ContactManager {
         if(mm<10){
             _mm = '0' + mm;
         }
-        var _today = yyyy + '-' + mm + '-' + dd;
-        // $(ContactManager.selectors.dob).attr("max", _today);
+        var _today = yyyy + '-' + _mm + '-' + _dd;
+        document.getElementById(ContactManager.selectors.dob).setAttribute("max", _today);
     }
     private static selectDeselect(status : boolean) : void {
         var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
@@ -208,11 +210,12 @@ class ContactManager {
     }
     private static loadContacts() : void {
         var contacts = document.getElementById(ContactManager.selectors.contacts);
+        var tableContent : string = "";
         if(ContactManager.contactList.length > 0){
-            var tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
-            var tempData = "";
+            tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead><tbody>";
+            var tempData : string = "";
             ContactManager.contactList.forEach(function(contact) {
-                var tempState = contact.state;
+                var tempState : string = contact.state;
                 if(tempState == "Select State"){
                     tempState = "";
                 }
@@ -220,13 +223,11 @@ class ContactManager {
             });
             tableContent += tempData;
             tableContent += "</tbody></table>";
-            contacts.innerHTML = tableContent;
-            // console.log(ContactManager.contactList);
         }
         else{
             tableContent = "<table id=\"list\" class=\"table-bordered table-hover\"><thead><tr><th>Select</th><th>Name</th><th>Mobile Number</th><th>EMail</th><th>DOB</th><th>Address</th><th>State</th><th>Actions</th></tr></thead></table>";
-            contacts.innerHTML = tableContent;
         }
+        contacts.innerHTML = tableContent;
     }
     private static deleteUpdateUtil(clickedImg : string) : void {
         var rowNumber = parseInt(clickedImg);
@@ -252,22 +253,22 @@ class ContactManager {
             document.getElementById(ContactManager.selectors.form).style.display = "block";
             ContactManager.toUpdate();
             ContactManager.deleteFlag = false;
-            ContactManager.clickable("none", "disabled", "active", "add");
+            ContactManager.clickable("none", "add");
         }
     }
-    private static clickable(pointerEvent : string, add : string, remove : string, attr : string) : void {
+    private static clickable(pointerEvent : string, attr : string) : void {
         var dIcon = document.getElementsByClassName(ContactManager.selectors.dIcon);
-        // dIcon.css("pointerEvents", pointerEvent);
+        for (let index = 0; index < dIcon.length; index++){
+            const element = <HTMLElement>dIcon[index];
+            element.style.pointerEvents = pointerEvent;
+        }
         var del = document.getElementById(ContactManager.selectors.deleteBtn);
-        // del.addClass(add);
-        // del.removeClass(remove);
         if(attr == "add"){
-            // del.attr("disabled", "disabled");
+            del.setAttribute("disabled", "disabled");
         }
         else{
-            // del.removeAttr("disabled", "disabled");
+            del.removeAttribute("disabled");//
         }
-        // del.css("pointerEvents", pointerEvent);
     }
     private static deleteContact() : void {
         if(confirm("Confirm Delete ?")){
@@ -317,36 +318,36 @@ class ContactManager {
         var cancel = document.getElementById(ContactManager.selectors.cancel);
         cancel.style.display = "none";
         ContactManager.resetForm();
-        ContactManager.clickable("auto", "active", "disabled", "remove");
+        ContactManager.clickable("auto", "remove");
     }
     private static showNotification(message : string) : void {
         var error = document.getElementById(ContactManager.selectors.error);
         var error_msg = document.getElementById(ContactManager.selectors.error_msg);
         error_msg.innerHTML = message;
         error.style.display = "block";
-        // error.addClass("alert alert-success alert-dismissible");
+        error.className += " alert alert-success alert-dismissible";
         setTimeout(function() {
             error.style.display = "none";
-            // error.removeClass("alert alert-danger alert-dismissible");
+            error.classList.remove("alert alert-success alert-dismissible");
         }, 5000);
         var close = document.getElementsByClassName(ContactManager.selectors.close);
         for(let index = 0; index < close.length; index++){
             const element = <HTMLElement>close[index];
             element.onclick = function(){
                 error.style.display = "none";
-                // error.removeClass("alert alert-danger alert-dismissible");
+                error.classList.remove("alert alert-success alert-dismissible");
             };
         }
     }
     private static updateContact() : void {
         var _name = (<HTMLInputElement>document.getElementById(ContactManager.selectors.name)).value;
-        var _phone = (<HTMLInputElement>(ContactManager.selectors.phone)).value;
-        var _email = (<HTMLInputElement>(ContactManager.selectors.email)).value;
-        var _dob = (<HTMLInputElement>(ContactManager.selectors.dob)).value;
+        var _phone = (<HTMLInputElement>document.getElementById(ContactManager.selectors.phone)).value;
+        var _email = (<HTMLInputElement>document.getElementById(ContactManager.selectors.email)).value;
+        var _dob = (<HTMLInputElement>document.getElementById(ContactManager.selectors.dob)).value;
         var isValid = ContactManager.validateInput(_name, _phone, _email, _dob);
         if(isValid){
-            var _address = (<HTMLInputElement>(ContactManager.selectors.address)).value;
-            var _state = (<HTMLInputElement>(ContactManager.selectors.state)).value;
+            var _address = (<HTMLInputElement>document.getElementById(ContactManager.selectors.address)).value;
+            var _state = (<HTMLInputElement>document.getElementById(ContactManager.selectors.state)).value;
             var newId = ContactManager.contactList[ContactManager.currentRecord].id;
             var newContact = new Contact(newId, _name, _phone, _email, _dob, _address, _state);
             ContactManager.contactList.splice(ContactManager.currentRecord, 1, newContact);
@@ -357,13 +358,13 @@ class ContactManager {
         else{
             var error = document.getElementById(ContactManager.selectors.error);
             error.style.display = "block";
-            // error.addClass("alert alert-danger alert-dismissible");
+            error.className += " alert alert-danger alert-dismissible";
             var close = document.getElementsByClassName(ContactManager.selectors.close);
             for(let index = 0; index < close.length; index++){
                 const element = <HTMLElement>close[index];
                 element.onclick = function(){
                     error.style.display = "none";
-                    // error.removeClass("alert alert-danger alert-dismissible");
+                    error.classList.remove("alert alert-danger alert-dismissible");
                 };
             }
         }
@@ -393,13 +394,13 @@ class ContactManager {
         else{
             var error = document.getElementById(ContactManager.selectors.error);
             error.style.display = "block";
-            // error.addClass("alert alert-danger alert-dismissible");
+            error.className += " alert alert-danger alert-dismissible";
             var close = document.getElementsByClassName(ContactManager.selectors.close);
             for(let index = 0; index < close.length; index++){
                 const element = <HTMLElement>close[index];
                 element.onclick = function(){
                     error.style.display = "none";
-                    // error.removeClass("alert alert-danger alert-dismissible");
+                    error.classList.remove("alert alert-danger alert-dismissible");
                 };
             }
         }
@@ -470,7 +471,7 @@ class ContactManager {
     private static deleteSelected() : void {
         if(ContactManager.deleteFlag){
             var checkboxes = document.getElementsByName(ContactManager.selectors.checkboxes);
-            var selectedCheckboxes : number[] = [];//
+            var selectedCheckboxes : number[] = [];
             for (let index = 0; index < checkboxes.length; index++) {
                 var element = <HTMLInputElement>checkboxes[index];
                 if(element.checked){
@@ -485,9 +486,9 @@ class ContactManager {
                     var tempContacts = [];
                     console.log(selectedCheckboxes);
                     ContactManager.contactList.forEach(function(contact) {
-                        // if(!selectedCheckboxes.includes(contact.id)){
+                        if(selectedCheckboxes.indexOf(contact.id) == -1){
                             tempContacts.push(contact);
-                        // }
+                        }
                     });
                     ContactManager.contactList = tempContacts;
                     ContactManager.loadContacts();
