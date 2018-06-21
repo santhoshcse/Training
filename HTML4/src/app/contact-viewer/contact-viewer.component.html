@@ -2,7 +2,7 @@
     <input id="toggle-form" type="button" class="opt-btn btn btn-info" value="Show/Hide Form" (click)="toggleForm()">
     <input id="Select-All" type="button" class="opt-btn btn btn-info" value="Select All" (click)="selectDeselect(true)">
     <input id="UnSelect-All" type="button" class="opt-btn btn btn-info" value="Deselect All" (click)="selectDeselect(false)">
-    <input id="Delete" type="button" class="opt-btn btn btn-danger" value="Delete" title="Delete Selected Rows" (click)="deleteSelected()">
+    <input id="Delete" type="button" class="opt-btn btn btn-danger" value="Delete" title="Delete Selected Rows" [disabled]="contactsService.canDelete" (click)="deleteSelected()">
 </div>
 <br>
 <div id="contacts-list" class="table-responsive-xl">

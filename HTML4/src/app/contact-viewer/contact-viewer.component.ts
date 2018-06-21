@@ -34,13 +34,7 @@ export class ContactViewerComponent implements OnInit {
       const element = <HTMLElement>dIcon[index];
       element.style.pointerEvents = pointerEvent;
     }
-    var del = document.getElementById(ContactsService.selectors.deleteBtn);
-    if(attr == "add"){
-      del.setAttribute("disabled", "disabled");
-    }
-    else{
-      del.removeAttribute("disabled");//
-    }
+    this.contactsService.canDelete = !this.contactsService.canDelete;
   }
 
   deleteContact(index: number) : void {

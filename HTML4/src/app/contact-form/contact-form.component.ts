@@ -46,7 +46,6 @@ export class ContactFormComponent implements OnInit {
     "Lakshadweep",
     "Puducherry"
   ];
-
   currentContact : Contact;
   newContact: Contact;
 
@@ -89,7 +88,7 @@ export class ContactFormComponent implements OnInit {
     this.maxDate = yyyy + '-' + _mm + '-' + _dd;
   }
 
-  resetForm(){
+  resetForm() : void {
     this.currentContact.name = "";
     this.currentContact.phoneNumber = "";
     this.currentContact.email = "";
@@ -104,13 +103,7 @@ export class ContactFormComponent implements OnInit {
       const element = <HTMLElement>dIcon[index];
       element.style.pointerEvents = pointerEvent;
     }
-    var del = document.getElementById(ContactsService.selectors.deleteBtn);
-    if(attr == "add"){
-      del.setAttribute("disabled", "disabled");
-    }
-    else{
-      del.removeAttribute("disabled");//
-    }
+    this.contactsService.canDelete = !this.contactsService.canDelete;
   }
 
   cancelUpdate() : void {

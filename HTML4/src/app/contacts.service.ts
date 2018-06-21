@@ -5,7 +5,6 @@ import { Contact } from './Contact';
   providedIn: 'root'
 })
 export class ContactsService {
-  contacts: Contact[] = [];
   static selectors : any = {
     contacts : "contacts-list",
     deleteBtn : "Delete",
@@ -30,11 +29,11 @@ export class ContactsService {
     view : "view-point",
     close : "close"
   };
-
+  contacts: Contact[] = [];
   deleteFlag: boolean = true;
   currentRecord: number = -1;
   currentContact: Contact;
-
+  canDelete : boolean = false;
   constructor() { 
     var newContact = new Contact(1, "Santhosh", "9003435809", "gsaku0091@gmail.com", "2018-05-21", "Coimbatore", "Tamil Nadu");
     this.contacts.push(newContact);
@@ -42,7 +41,6 @@ export class ContactsService {
     this.contacts.push(newContact);
     this.currentContact = new Contact(0, "sam", "", "", "", "", "Select State");
   }
-
   editContact(contact : Contact){
     this.currentContact.id = contact.id;
     this.currentContact.name = contact.name;
@@ -52,30 +50,20 @@ export class ContactsService {
     this.currentContact.address = contact.address;
     this.currentContact.state = contact.state;
   }
-
   addContact(newContact: Contact){
     this.contacts.push(newContact);
   }
-
   toUpdate(index, currentContact){
     this.editContact(currentContact);
     this.currentRecord = index;
   }
-
   deleteContact(index){
     this.contacts.splice(index, 1);
   }
   deleteContacts(contactId: number[]){
     var indexList: number[] = [];
-    var tempContacts: Contact[] = [];
     this.contacts.forEach(function(contact, index) {
-      console.log(index);
-      console.log(contact.id);
-      if(contactId.indexOf(contact.id) == -1){
-
-        tempContacts.push(contact);
-      }
-      else{
+      if(!(contactId.indexOf(contact.id) == -1)){
         indexList.push(index);
       }
     });
