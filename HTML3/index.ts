@@ -194,10 +194,10 @@ class ContactManager {
         var _dd, _mm;
         if(dd<10){
             _dd = '0' + dd;
-        }
+        }//else
         if(mm<10){
             _mm = '0' + mm;
-        }
+        }//else
         var _today = yyyy + '-' + _mm + '-' + _dd;
         document.getElementById(ContactManager.selectors.dob).setAttribute("max", _today);
     }

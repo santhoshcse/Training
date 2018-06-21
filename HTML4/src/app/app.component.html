@@ -1,0 +1,14 @@
+<div class="container-fluid">
+    <div id="header">
+        <h1 id="site-title" class="text-body">
+            <img src="../assets/title.png" alt="title icon" height="25" width="25" class="img-fluid">
+            Contacts Manager
+        </h1>
+    </div>
+    <div id="body" class="container-fluid">
+        <div class="row">
+            <app-contact-form id="create-update-form" class="col-4" *ngIf="!hide"></app-contact-form>
+            <app-contact-viewer id="view-point" [class]="colValue" (hideFlag)=changeHide($event)></app-contact-viewer>
+        </div>
+    </div>
+</div>

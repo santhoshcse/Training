@@ -1,0 +1,52 @@
+<div>
+    <table>
+        <tbody>
+            <tr>
+                <td><label class="required" for="name">Name</label></td>
+                <td><input type="text" id="name" class="form-control" size="24" autocomplete="off" [(ngModel)]="currentContact.name"></td>
+            </tr>
+            <tr>
+                <td><label class="required" for="phone">Mobile Number</label></td>
+                <td><input type="tel" id="phone" class="form-control" maxlength="10" size="24" autocomplete="off" [(ngModel)]="currentContact.phoneNumber"></td>
+            </tr>
+            <tr>
+                <td><label for="email">E-Mail</label></td>
+                <td><input type="email" id="email" class="form-control" size="24" autocomplete="off" [(ngModel)]="currentContact.email"></td>
+            </tr>
+            <tr>
+                <td><label for="dob">DOB</label></td>
+                <td><input type="date" id="dob" class="form-control" [min]="minDate" [max]="maxDate" [(ngModel)]="currentContact.dateOfBirth"></td>
+            </tr>
+            <tr>
+                <td><label for="address">Address</label></td>
+                <td><textarea id="address" class="form-control" rows="3" cols="26" [(ngModel)]="currentContact.address"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="state">State</label></td>
+                <td>
+                    <select name="States" id="state" class="form-control" [(ngModel)]="currentContact.state">
+                        <option value="Select State" style="background-color:darkgray">Select State</option>
+                        <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <input type="button" id="Add-Contact" class="opt-btn btn btn-primary" value="Create" (click)="addContact()">
+                    <input type="button" id="Update-Contact" class="opt-btn btn btn-primary" value="Update" (click)="updateContact()">
+                </td>
+                <td>
+                    <input type="button" id="Reset" class="opt-btn btn btn-info" value="Reset" (click)="resetForm()">
+                    <input type="button" id="Cancel" class="opt-btn btn btn-info" value="Cancel" (click)="cancelUpdate()">
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<br>
+<div id="Notification">
+    <button type="button" class="close">&times;</button>
+    <p id="Msg"></p>
+</div>

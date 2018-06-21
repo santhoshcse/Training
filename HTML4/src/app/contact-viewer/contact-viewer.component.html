@@ -1,0 +1,38 @@
+<div id="option-header">
+    <input id="toggle-form" type="button" class="opt-btn btn btn-info" value="Show/Hide Form" (click)="toggleForm()">
+    <input id="Select-All" type="button" class="opt-btn btn btn-info" value="Select All" (click)="selectDeselect(true)">
+    <input id="UnSelect-All" type="button" class="opt-btn btn btn-info" value="Deselect All" (click)="selectDeselect(false)">
+    <input id="Delete" type="button" class="opt-btn btn btn-danger" value="Delete" title="Delete Selected Rows" (click)="deleteSelected()">
+</div>
+<br>
+<div id="contacts-list" class="table-responsive-xl">
+    <table id="list" class="table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Name</th>
+                <th>Mobile Number</th>
+                <th>EMail</th>
+                <th>DOB</th>
+                <th>Address</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let contact of contacts; let i = index">
+                <td><input type="checkbox" name="select-contact" [value]="contact.id"></td>
+                <td>{{contact.name}}</td>
+                <td>{{contact.phoneNumber}}</td>
+                <td>{{contact.email}}</td>
+                <td>{{contact.dateOfBirth}}</td>
+                <td>{{contact.address}}</td>
+                <td>{{(contact.state == "Select State")? "": contact.state}}</td>
+                <td>
+                    <img src="../../assets/delete.png" alt="delete contact" height="25" width="25" (click)="deleteUpdateUtil([0, i, contact])" [id]="contact.id + '-delete'" class="delete-icon" title="delete contact" >
+                    <img src="../../assets/edit.svg" alt="Update contact" height="25" width="25" style="margin-left:10px;" (click)="deleteUpdateUtil([1, i, contact])" [id]="contact.id + '-update'" class="update-icon" title="edit contact" >
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

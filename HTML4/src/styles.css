@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #CAD3C8;
+}
+#header {
+    background-color: #63cdda;
+}
+#site-title {
+    text-align: center;
+}
+input[type="checkbox"] {
+    width: 25px; 
+    height: 25px; 
+}
+#Update-Contact,
+#Cancel {
+    display: none;
+}
+.required::after {
+    content: " *";
+    color: red;
+}
+#contacts-list {
+    overflow: auto;
+    height: 500px;
+    width: 100%;
+}
+#Notification {
+    width: 80%;
+    display: none;
+}
+#list {
+    width: 100%;
+}
+#list td,
+#list th {
+    text-align: center;
+}
+#address {
+    resize: none;
+}
