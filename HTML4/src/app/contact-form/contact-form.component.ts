@@ -52,6 +52,8 @@ export class ContactFormComponent implements OnInit {
   minDate: string;
   maxDate: string;
 
+  //Selectors
+
   constructor(private contactsService: ContactsService) {
     this.currentContact = this.contactsService.currentContact;
     this.resetForm();
@@ -177,22 +179,41 @@ export class ContactFormComponent implements OnInit {
     return true;
   }
 
+  private removeNotificationSuccess(error : HTMLElement){
+    error.classList.remove("alert");
+    error.classList.remove("alert-success");
+    error.classList.remove("alert-dismissible");
+  }
+  private removeNotificationDanger(error : HTMLElement){
+    error.classList.remove("alert");
+    error.classList.remove("alert-danger");
+    error.classList.remove("alert-dismissible");
+  }
+  private addNotificationDanger(error : HTMLElement){
+    error.classList.add("alert");
+    error.classList.add("alert-danger");
+    error.classList.add("alert-dismissible");
+  }
+
   private showNotification(message : string) : void {
     var error = document.getElementById(ContactsService.selectors.error);
     var error_msg = document.getElementById(ContactsService.selectors.error_msg);
     error_msg.innerHTML = message;
     error.style.display = "block";
-    error.className += " alert alert-success alert-dismissible";
-    setTimeout(function() {
+    this.removeNotificationDanger(error);
+    error.classList.add("alert");
+    error.classList.add("alert-success");
+    error.classList.add("alert-dismissible");
+    setTimeout(() => {
       error.style.display = "none";
-      error.classList.remove("alert alert-success alert-dismissible");
+      this.removeNotificationSuccess(error);
     }, 5000);
     var close = document.getElementsByClassName(ContactsService.selectors.close);
     for(let index = 0; index < close.length; index++){
       const element = <HTMLElement>close[index];
-      element.onclick = function(){
+      element.onclick = () => {
         error.style.display = "none";
-        error.classList.remove("alert alert-success alert-dismissible");
+        this.removeNotificationSuccess(error);
       };
     }
   }
@@ -216,13 +237,14 @@ export class ContactFormComponent implements OnInit {
     else{
       var error = document.getElementById(ContactsService.selectors.error);
       error.style.display = "block";
-      error.className += " alert alert-danger alert-dismissible";
+      this.removeNotificationSuccess(error);
+      this.addNotificationDanger(error);
       var close = document.getElementsByClassName(ContactsService.selectors.close);
       for(let index = 0; index < close.length; index++){
         const element = <HTMLElement>close[index];
-        element.onclick = function(){
+        element.onclick = () => {
           error.style.display = "none";
-          error.classList.remove("alert alert-danger alert-dismissible");
+          this.removeNotificationDanger(error);
         };
       }
     }
@@ -240,13 +262,14 @@ export class ContactFormComponent implements OnInit {
     else{
       var error = document.getElementById(ContactsService.selectors.error);
       error.style.display = "block";
-      error.className += " alert alert-danger alert-dismissible";
+      this.removeNotificationSuccess(error);
+      this.addNotificationDanger(error);
       var close = document.getElementsByClassName(ContactsService.selectors.close);
       for(let index = 0; index < close.length; index++){
         const element = <HTMLElement>close[index];
-        element.onclick = function(){
+        element.onclick = () => {
           error.style.display = "none";
-          error.classList.remove("alert alert-danger alert-dismissible");
+          this.removeNotificationDanger(error);
         };
       }
     }

@@ -1,0 +1,11 @@
+notification dynamic class change - done
+data refresh when toggling form
+notification div not found error when display_notification called on deletion when form is hidden - don't notifiy
+notification auto hide delay sync
+one time element selector picking
+code modularity and reuse
+
+jquery to modern js
+ts native function change
+angular with dynamic content
+attractive ui for form
