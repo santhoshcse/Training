@@ -34,7 +34,7 @@ export class ContactViewerComponent implements OnInit {
       const element = <HTMLElement>dIcon[index];
       element.style.pointerEvents = pointerEvent;
     }
-    this.contactsService.canDelete = !this.contactsService.canDelete;
+    this.contactsService.canDelete = (attr=="add") ? true : false;
   }
 
   deleteContact(index: number) : void {
@@ -68,7 +68,7 @@ export class ContactViewerComponent implements OnInit {
       }
     }
     else if(cmd == 1){
-      document.getElementById(ContactsService.selectors.form).style.display = "block";
+      document.getElementById(ContactsService.selectors.form).style.display = "block";//bug
       this.toUpdate(index, currentContact);
       this.contactsService.deleteFlag = false;
       this.clickable("none", "add");

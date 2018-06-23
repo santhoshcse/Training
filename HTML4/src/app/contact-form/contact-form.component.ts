@@ -99,13 +99,13 @@ export class ContactFormComponent implements OnInit {
     this.currentContact.state = "Select State";
   }
 
-  clickable(pointerEvent : string, attr : string) : void {
+  clickable(pointerEvent : string) : void {
     var dIcon = document.getElementsByClassName(ContactsService.selectors.dIcon);
     for (let index = 0; index < dIcon.length; index++){
       const element = <HTMLElement>dIcon[index];
       element.style.pointerEvents = pointerEvent;
     }
-    this.contactsService.canDelete = !this.contactsService.canDelete;
+    this.contactsService.canDelete = false;
   }
 
   cancelUpdate() : void {
@@ -119,7 +119,7 @@ export class ContactFormComponent implements OnInit {
     var cancel = document.getElementById(ContactsService.selectors.cancel);
     cancel.style.display = "none";
     this.resetForm();
-    this.clickable("auto", "remove");
+    this.clickable("auto");
   }
 
   private checkDOB() : boolean {
